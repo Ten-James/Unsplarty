@@ -1,3 +1,3 @@
 # UNSPLARTY
 
-` Party game using firebase and unsplash `
+`Party game using firebase and unsplash`

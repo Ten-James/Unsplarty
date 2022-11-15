@@ -10,12 +10,11 @@ const Admin = () => {
           write("players", []);
           write("theme", "");
           write("image", "");
-          write('playerOrder', []);
+          write("playerOrder", []);
           write("fakeImage", []);
 
-
           // redirect to lobby
-          setTimeout(()=>window.location.href = '/', 2000);
+          setTimeout(() => (window.location.href = "/"), 2000);
         }}
       >
         Reset
