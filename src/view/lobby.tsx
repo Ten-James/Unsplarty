@@ -11,7 +11,7 @@ interface Props {
 
 const Lobby = (props: Props) => {
   return (
-    <div className="App">
+    <>
       <h1>Unsplarty</h1>
       <div className="container">
         <h2>Players</h2>
@@ -51,7 +51,7 @@ const Lobby = (props: Props) => {
           <p>Waiting for master to start</p>
         )}
       </div>
-    </div>
+    </>
   );
 };
 

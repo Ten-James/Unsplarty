@@ -40,8 +40,10 @@ function App() {
   }
 
   return (
+    <>
+    {amIMaster && <p className="master">I am master</p>}
     <div className="App">
-      {amIMaster && <p className="master">I am master</p>}
+      
       {gameState === "lobby" && (
         <Lobby
           players={players}
@@ -69,7 +71,7 @@ function App() {
           amIChooser={playerOrder[currentPlayer] === name}
         />
       )}
-    </div>
+    </div></>
   );
 }
 

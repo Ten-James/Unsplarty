@@ -920,7 +920,7 @@ const ThemeSelect = (props: ThemeSelectProps) => {
   };
 
   return (
-    <div className="App">
+    <>
       <h1>Theme Select</h1>
       {props.amIChooser ? (
         <div>
@@ -932,7 +932,7 @@ const ThemeSelect = (props: ThemeSelectProps) => {
       ) : (
         <p>Waiting for chooser to choose</p>
       )}
-    </div>
+    </>
   );
 };
 

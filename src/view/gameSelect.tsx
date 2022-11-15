@@ -16,7 +16,7 @@ const GameSelect = ({
   players,
 }: GameSelectProps) => {
   return (
-    <div>
+    <>
       <h1>Game Select</h1>
       <div className="container">
         <p>Current Game: {currentGame}</p>
@@ -36,7 +36,7 @@ const GameSelect = ({
           Start
         </button>
       </div>
-    </div>
+    </>
   );
 };
 

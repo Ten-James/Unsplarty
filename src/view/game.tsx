@@ -14,7 +14,7 @@ const Game = ({ amIChooser, imageUrls }: GameInterface) => {
   }, []);
 
   return (
-    <div className="App">
+    <>
       <h1>Game</h1>
       <div className="container">
         {amIChooser ? (
@@ -48,7 +48,7 @@ const Game = ({ amIChooser, imageUrls }: GameInterface) => {
           </div>
         )}
       </div>
-    </div>
+    </>
   );
 };
 
