@@ -16,3 +16,15 @@ export const formSubmit = (event: FormEvent<HTMLFormElement>, players: string[],
     const newPlayers = [...players, newName];
     write("players", newPlayers);
 }
+
+
+export const StartGame = (players: string[]) => {
+    write("gameState", 'choosing');
+    //random player order
+    const playerOrder = players.sort(() => Math.random() - 0.5);
+    write("playerOrder", playerOrder);
+    write("currentPlayer", Math.floor(Math.random() * players.length));
+    write("theme", "");
+    write("image", "");
+    write("fakeImage", []);
+}

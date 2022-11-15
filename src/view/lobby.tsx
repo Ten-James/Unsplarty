@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { write } from "./firebase";
-import { formSubmit } from "./handlers";
+import { write } from "../firebase";
+import { formSubmit } from "../handlers";
 
 interface Props {
   players: string[];
   name: string;
+  isAdmin: boolean;
   setName: (name: string) => void;
 }
 
@@ -38,7 +39,11 @@ const Lobby = (props: Props) => {
           <button type="submit">Submit</button>
         </form>
       )}
-      <button onClick={() => write("gameState", "chooseGame")}>Start</button>
+      {props.isAdmin ?
+      <button onClick={() => write("gameState", "gameSelect")}>Start</button>
+      :
+      <p>Waiting for master to start</p>
+      }
     </div>
   );
 };
