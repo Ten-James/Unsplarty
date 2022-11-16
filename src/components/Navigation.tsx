@@ -1,6 +1,6 @@
 import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
+import { Grid } from '@mui/material';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
@@ -10,15 +10,18 @@ interface Props {
 	name: string;
 }
 
-export default function Navigation({ title }: Props) {
+export default function Navigation({ title, name }: Props) {
 	return (
-		<Box sx={{ flexGrow: 1 }}>
+		<Grid
+			item
+			sx={{ flexGrow: 1 }}
+		>
 			<AppBar position='static'>
 				<Toolbar>
 					<Typography
 						variant='h6'
 						component='div'
-						sx={{ flexGrow: 1 }}
+						sx={{ flexGrow: 2 }}
 					>
 						{title}
 					</Typography>
@@ -30,6 +33,6 @@ export default function Navigation({ title }: Props) {
 					</Typography>
 				</Toolbar>
 			</AppBar>
-		</Box>
+		</Grid>
 	);
 }

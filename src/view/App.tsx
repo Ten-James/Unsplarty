@@ -3,7 +3,6 @@ import { subscribe, write } from '../firebase';
 import { useDatabase } from '../hooks/useDatabase';
 import Lobby from './lobby';
 import GameSelect from './gameSelect';
-import '../App.css';
 import ThemeSelect from './themeSelect';
 import Game from './game';
 
@@ -43,7 +42,7 @@ function App() {
 	const [currentPlayer, setCurrentPlayer] = useDatabase<number>('currentPlayer', 0);
 	const [playerOrder, setPlayerOrder] = useDatabase<string[]>('playerOrder', []);
 
-	const [gameState, setGameState] = useDatabase<string>('gameState', '');
+	const [gameState, setGameState] = useDatabase<string>('gameState', 'lobby');
 	const [players, setPlayers] = useDatabase<string[]>('players', []);
 	const [currentGame, setCurrentGame] = useDatabase('talking', '');
 
