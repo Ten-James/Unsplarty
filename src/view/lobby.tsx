@@ -10,10 +10,7 @@ const Lobby = () => {
 
 	return (
 		<>
-			<Navigation
-				title='UnsPLARTY'
-				name={userName}
-			/>
+			<Navigation title='Lobby' />
 			<Grid
 				container
 				spacing={2}
@@ -53,6 +50,7 @@ const Lobby = () => {
 							<Typography
 								variant='subtitle1'
 								component='div'
+								align='center'
 							>
 								Youre in the game!
 							</Typography>
@@ -90,7 +88,13 @@ const Lobby = () => {
 							</Paper>
 						)}
 						{amIMaster ? (
-							<button onClick={() => setGameState('gameSelect')}>Start</button>
+							<Button
+								fullWidth
+								variant='outlined'
+								onClick={() => setGameState('gameSelect')}
+							>
+								Start
+							</Button>
 						) : (
 							<Typography
 								margin='1rem'

@@ -2,6 +2,7 @@ import { useState, useEffect, createContext } from 'react';
 import { subscribe, write } from '../firebase';
 import { useDatabase } from '../hooks/useDatabase';
 import Lobby from './lobby';
+import Loading from './loading';
 import GameSelect from './gameSelect';
 import ThemeSelect from './themeSelect';
 import Game from './game';
@@ -79,13 +80,12 @@ function App() {
 
 	return (
 		<DataContext.Provider value={ContextData}>
-			{amIMaster && <p className='master'>I am master</p>}
 			<div className='App'>
 				{gameState === 'lobby' && <Lobby />}
 				{gameState === 'gameSelect' && <GameSelect />}
-				{gameState === 'choosing' && !playerOrder && <h1>Loading...</h1>}
+				{gameState === 'choosing' && !playerOrder && <Loading />}
 				{gameState === 'choosing' && playerOrder && <ThemeSelect />}
-				{gameState === 'playing' && (!image || !fakeImage) && <h1>Loading...</h1>}
+				{gameState === 'playing' && (!image || !fakeImage) && <Loading />}
 				{gameState === 'playing' && image && fakeImage && <Game />}
 			</div>
 		</DataContext.Provider>
