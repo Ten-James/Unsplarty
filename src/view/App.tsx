@@ -1,78 +1,96 @@
-import { useState, useEffect } from "react";
-import { subscribe, write } from "../firebase";
-import Lobby from "./lobby";
-import GameSelect from "./gameSelect";
-import "../App.css";
-import ThemeSelect from "./themeSelect";
-import Game from "./game";
+import { useState, useEffect, createContext } from 'react';
+import { subscribe, write } from '../firebase';
+import { useDatabase } from '../hooks/useDatabase';
+import Lobby from './lobby';
+import GameSelect from './gameSelect';
+import '../App.css';
+import ThemeSelect from './themeSelect';
+import Game from './game';
+
+interface DataContextType {
+	userName: string;
+	setUserName: (name: string) => void;
+	gameState: string;
+	setGameState: (state: string) => void;
+	currentGame: string;
+	setCurrentGame: (game: string) => void;
+	players: string[];
+	setPlayers: (players: string[]) => void;
+	imageUrls: string[];
+	setImage: (url: string) => void;
+	setFakeImage: (urls: string[]) => void;
+	amIMaster: boolean;
+	amIChooser: boolean;
+}
+
+export const DataContext = createContext<DataContextType>({
+	userName: '',
+	setUserName: () => {},
+	gameState: '',
+	setGameState: () => {},
+	currentGame: '',
+	setCurrentGame: () => {},
+	players: [],
+	setPlayers: () => {},
+	imageUrls: [],
+	setImage: () => {},
+	setFakeImage: () => {},
+	amIMaster: false,
+	amIChooser: false,
+});
 
 function App() {
-  const [currentPlayer, setCurrentPlayer] = useState(0);
-  const [playerOrder, setPlayerOrder] = useState<string[]>([]);
+	const [currentPlayer, setCurrentPlayer] = useDatabase<number>('currentPlayer', 0);
+	const [playerOrder, setPlayerOrder] = useDatabase<string[]>('playerOrder', []);
 
-  const [gameState, setGameState] = useState("lobby");
-  const [players, setPlayers] = useState<string[]>([]);
-  const [currentGame, setCurrentGame] = useState("talking");
+	const [gameState, setGameState] = useDatabase<string>('gameState', '');
+	const [players, setPlayers] = useDatabase<string[]>('players', []);
+	const [currentGame, setCurrentGame] = useDatabase('talking', '');
 
-  const [image, setImage] = useState("");
-  const [fakeImage, setFakeImage] = useState<string[]>([]);
+	const [image, setImage] = useDatabase<string>('image', '');
+	const [fakeImage, setFakeImage] = useDatabase<string[]>('fakeImage', []);
 
-  const [name, setName] = useState("");
+	const [userName, setUserName] = useState('');
 
-  const amIMaster = players !== null && players[0] === name;
+	const amIMaster = players !== null && players[0] === userName;
 
-  useEffect(() => {
-    subscribe("players", setPlayers);
-    subscribe("gameState", setGameState);
-    subscribe("currentGame", setCurrentGame);
-    subscribe("playerOrder", setPlayerOrder);
-    subscribe("currentPlayer", setCurrentPlayer);
-    subscribe("image", setImage);
-    subscribe("fakeImage", setFakeImage);
-  }, []);
+	if (userName === '' && gameState !== 'lobby') {
+		return (
+			<div className='App'>
+				<h1>You are late ask them to reset game</h1>
+			</div>
+		);
+	}
 
-  if (name === "" && gameState !== "lobby") {
-    return (
-      <div className="App">
-        <h1>You are late ask them to reset game</h1>
-      </div>
-    );
-  }
+	const ContextData: DataContextType = {
+		userName,
+		setUserName,
+		gameState,
+		setGameState,
+		currentGame,
+		setCurrentGame,
+		players,
+		setPlayers,
+		imageUrls: fakeImage ? [image, ...fakeImage] : [image],
+		setImage,
+		setFakeImage,
+		amIMaster,
+		amIChooser: playerOrder !== null && playerOrder[currentPlayer] === userName,
+	};
 
-  return (
-    <>
-    {amIMaster && <p className="master">I am master</p>}
-    <div className="App">
-      
-      {gameState === "lobby" && (
-        <Lobby
-          players={players}
-          name={name}
-          setName={setName}
-          isAdmin={amIMaster}
-        />
-      )}
-      {gameState === "gameSelect" && (
-        <GameSelect
-          players={players}
-          currentGame={currentGame}
-          onGameSelect={(game) => write("currentGame", game)}
-          isAdmin={amIMaster}
-        />
-      )}
-      {gameState === "choosing" && !playerOrder && <h1>Loading...</h1>}
-      {gameState === "choosing" && playerOrder && (
-        <ThemeSelect amIChooser={playerOrder[currentPlayer] === name} />
-      )}
-      {gameState === "playing" && (!image || !fakeImage) && <h1>Loading...</h1>}
-      {gameState === "playing" && image && fakeImage && (
-        <Game
-          imageUrls={[image, ...fakeImage]}
-          amIChooser={playerOrder[currentPlayer] === name}
-        />
-      )}
-    </div></>
-  );
+	return (
+		<DataContext.Provider value={ContextData}>
+			{amIMaster && <p className='master'>I am master</p>}
+			<div className='App'>
+				{gameState === 'lobby' && <Lobby />}
+				{gameState === 'gameSelect' && <GameSelect />}
+				{gameState === 'choosing' && !playerOrder && <h1>Loading...</h1>}
+				{gameState === 'choosing' && playerOrder && <ThemeSelect />}
+				{gameState === 'playing' && (!image || !fakeImage) && <h1>Loading...</h1>}
+				{gameState === 'playing' && image && fakeImage && <Game />}
+			</div>
+		</DataContext.Provider>
+	);
 }
 
 export default App;
