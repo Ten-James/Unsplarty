@@ -10,3 +10,93 @@ body {
   grid-template-rows: auto 1fr;
   
 }
+
+.load {
+  position: absolute;
+  width: 4em;
+  height: 4em;
+  top: 50%;
+  left: 50%;
+}
+
+.load5{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 25vh);
+  opacity: 0.3;
+}
+
+
+.load1 {
+  transform: translate(-4.5em, -4.5em) scaleY(1);
+  transform-origin: center 3em;
+  animation: load1Anim 2s -1500ms infinite ease-in-out;
+}
+.load2 {
+  transform: translate(0.5em, -4.5em) scaleX(1);
+  transform-origin: 1em center;
+  animation: load2Anim 2s infinite ease-in-out;
+}
+.load3 {
+  transform: translate(-4.5em, 0.5em) scaleX(1);
+  transform-origin: 3em center;
+  animation: load3Anim 2s -1000ms infinite ease-in-out;
+
+}
+.load4 {
+  transform-origin: center 1em;
+  transform: translate(0.5em, 0.5em) scaleY(1);
+  animation: load4Anim 2s -500ms infinite ease-in-out;
+}
+@keyframes blink {
+  0%, 49.9%, 100%   { opacity: 0; }
+  50%, 99.9% { opacity: 1; }
+}
+@keyframes load2Anim {
+  0% {
+    transform: translate(0.5em, -4.5em) scaleX(1);
+  }
+  50% {
+    transform: translate(0.5em, -4.5em) scaleX(0);
+  }
+  100% {
+    transform: translate(0.5em, -4.5em) scaleX(1);
+  }
+}
+
+@keyframes load1Anim {
+  0% {
+    transform: translate(-4.5em, -4.5em) scaleY(1);
+  }
+  50% {
+    transform: translate(-4.5em, -4.5em) scaleY(0);
+  }
+  100% {
+    transform: translate(-4.5em, -4.5em) scaleY(1);
+  }
+}
+
+@keyframes load3Anim {
+  0% {
+    transform: translate(-4.5em, 0.5em) scaleX(1);
+  }
+  50% {
+    transform: translate(-4.5em, 0.5em) scaleX(0);
+  }
+  100% {
+    transform: translate(-4.5em, 0.5em) scaleX(1);
+  }
+}
+
+@keyframes load4Anim {
+  0% {
+    transform: translate(0.5em, 0.5em) scaleY(1);
+  }
+  50% {
+    transform: translate(0.5em, 0.5em) scaleY(0);
+  }
+  100% {
+    transform: translate(0.5em, 0.5em) scaleY(1);
+  }
+}

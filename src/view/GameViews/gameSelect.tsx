@@ -1,23 +1,19 @@
 import { useContext } from 'react';
-import { DataContext } from './App';
-import { StartGame } from '../handlers';
+import { DataContext } from '../../ContextData';
+import { StartGame } from '../../handlers';
 import { Grid, Paper, Button, ButtonGroup, Typography } from '@mui/material';
-import Navigation from '../components/Navigation';
+import Navigation from '../../components/Navigation';
 import { Container } from '@mui/system';
-import Base from '../components/base';
+import Base from '../../components/base';
+import { HeaderText } from '../../components/plaingText';
 
-const GAMEMODES = ['talk&guess', 'reverse'];
+const GAMEMODES = ['talk&guess'];
 
 export default function GameSelect() {
 	const { currentGame, setCurrentGame, amIMaster, players, userName } = useContext(DataContext);
 	return (
 		<Base title='Game Select'>
-			<Typography
-				component='div'
-				variant='h5'
-			>
-				Current Game: {currentGame}
-			</Typography>
+			<HeaderText text={`Current game: ${currentGame}`} />
 			<Grid
 				container
 				justifyContent='center'

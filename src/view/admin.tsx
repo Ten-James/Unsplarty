@@ -1,28 +1,23 @@
 import { write } from '../firebase';
+import { useEffect } from 'react';
+import Loading from './loading';
 
 const Admin = () => {
-	return (
-		<div>
-			<h1>Admin</h1>
-			<button
-				onClick={() => {
-					write('gameState', 'lobby');
-					write('players', []);
-					write('theme', '');
-					write('image', '');
-					write('playerOrder', []);
-					write('fakeImage', []);
-					write('playerOpinions', []);
-					write('playerScores', []);
-					write('playerStreaks', []);
+	useEffect(() => {
+		write('gameState', 'lobby');
+		write('players', []);
+		write('theme', '');
+		write('image', '');
+		write('playerOrder', []);
+		write('fakeImage', []);
+		write('playerOpinions', []);
+		write('playerScores', []);
+		write('playerStreaks', []);
 
-					// redirect to lobby
-					setTimeout(() => (window.location.href = '/'), 2000);
-				}}
-			>
-				Reset
-			</button>
-		</div>
-	);
+		// redirect to lobby
+		setTimeout(() => (window.location.href = '/'), 2000);
+	}, []);
+
+	return <Loading />;
 };
 export default Admin;

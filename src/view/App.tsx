@@ -1,62 +1,17 @@
-import { useState, useEffect, createContext } from 'react';
-import { subscribe, write } from '../firebase';
+import { useState, useEffect } from 'react';
 import { useDatabase } from '../hooks/useDatabase';
 import { onPlayerVote } from '../handlers';
-import Lobby from './lobby';
+import Lobby from './GameViews/lobby';
 import Loading from './loading';
-import GameSelect from './gameSelect';
-import ThemeSelect from './themeSelect';
-import Game from './game';
-import Result from './result';
+import GameSelect from './GameViews/gameSelect';
+import ThemeSelect from './GameViews/themeSelect';
+import Game from './GameViews/game';
+import Result from './GameViews/result';
 import { ThemeProvider } from '@mui/material';
 import { darkThemeOption, lightThemeOption } from '../theme';
 import { Box } from '@mui/material';
 
-interface DataContextType {
-	myIndex: number;
-	userName: string;
-	setUserName: (name: string) => void;
-	gameState: string;
-	setGameState: (state: string) => void;
-	currentGame: string;
-	setCurrentGame: (game: string) => void;
-	players: string[];
-	setPlayers: (players: string[]) => void;
-	imageUrls: string[];
-	setImage: (url: string) => void;
-	setFakeImage: (urls: string[]) => void;
-	amIMaster: boolean;
-	amIChooser: boolean;
-	onVote: (vote: number, timer: number) => void;
-	playerOpinions: number[];
-	playerScores: number[];
-	playerStreaks: number[];
-	nextPlayer: () => void;
-	changeTheme: (dark: boolean) => void;
-}
-
-export const DataContext = createContext<DataContextType>({
-	myIndex: 0,
-	userName: '',
-	setUserName: () => {},
-	gameState: '',
-	setGameState: () => {},
-	currentGame: '',
-	setCurrentGame: () => {},
-	players: [],
-	setPlayers: () => {},
-	imageUrls: [],
-	setImage: () => {},
-	setFakeImage: () => {},
-	amIMaster: false,
-	amIChooser: false,
-	onVote: () => {},
-	playerOpinions: [],
-	playerScores: [],
-	playerStreaks: [],
-	nextPlayer: () => {},
-	changeTheme: () => {},
-});
+import { DataContext, DataContextType } from '../ContextData';
 
 const App = () => {
 	const [currentPlayer, setCurrentPlayer] = useDatabase<number>('currentPlayer', 0);
@@ -71,7 +26,7 @@ const App = () => {
 
 	const [image, setImage] = useDatabase<string>('image', '');
 	const [fakeImage, setFakeImage] = useDatabase<string[]>('fakeImage', []);
-	const [darkTheme, setDarkTheme] = useState(false);
+	const [darkTheme, setDarkTheme] = useState(true);
 
 	const [userName, setUserName] = useState('');
 
@@ -111,6 +66,7 @@ const App = () => {
 		playerScores,
 		playerStreaks,
 		nextPlayer: () => setCurrentPlayer((currentPlayer + 1) % players.length),
+		theme: darkTheme,
 		changeTheme: (dark) => setDarkTheme(dark),
 	};
 

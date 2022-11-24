@@ -1,7 +1,7 @@
 import { Button, List, ListItem, ListItemText, Typography } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
-import Base from '../components/base';
-import { DataContext } from './App';
+import Base from '../../components/base';
+import { DataContext } from '../../ContextData';
 
 interface PlayerViewType {
 	name: string;

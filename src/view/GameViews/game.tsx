@@ -1,8 +1,8 @@
 import { useEffect, useContext, useState } from 'react';
-import { DataContext } from './App';
-import Navigation from '../components/Navigation';
+import { DataContext } from '../../ContextData';
 import { Grid, Paper, Typography, ImageList, ImageListItem, LinearProgress } from '@mui/material';
-import Base from '../components/base';
+import Base from '../../components/base';
+import { HeaderText } from '../../components/plaingText';
 
 export default function Game() {
 	const { amIChooser, imageUrls, onVote, setGameState, playerOpinions } = useContext(DataContext);
@@ -38,7 +38,7 @@ export default function Game() {
 			);
 		return (
 			<Base title='Game'>
-				<Typography>Describe the picture</Typography>
+				<HeaderText text='Describe the picture' />
 				<LinearProgress
 					variant='determinate'
 					value={timer}
@@ -50,7 +50,7 @@ export default function Game() {
 	if (Phase === 0) {
 		return (
 			<Base title='Game'>
-				<Typography>Prepare for pictures</Typography>
+				<HeaderText text='Prepare for pictures' />
 			</Base>
 		);
 	}
@@ -58,7 +58,7 @@ export default function Game() {
 	return (
 		<Base title='Game'>
 			{chosenImage ? (
-				<Typography align='center'>I Choosed</Typography>
+				<HeaderText text='You have already chosen.' />
 			) : (
 				<ImageList
 					variant='masonry'

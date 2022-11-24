@@ -39,3 +39,32 @@ export const onPlayerVote = (playerIndex: number, urlIndex: number, timer: numbe
 		if (timer !== 0) write(`playerStreaks/${playerIndex}`, playerStreaks[playerIndex] + 1);
 	} else write(`playerStreaks/${playerIndex}`, 0);
 };
+
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+export const Handler = async (theme: string, players: string[], setGameState: (state: string) => void, setImage: (url: string) => void, setFakeImage: (urls: string[]) => void) => {
+	setGameState('playing');
+	write('theme', theme);
+	const res1 = await fetch('https://source.unsplash.com/random/?' + theme);
+	await sleep(1000);
+	let res2 = await fetch('https://source.unsplash.com/random/?' + theme);
+	while (res1.url === res2.url) {
+		await sleep(1000);
+		res2 = await fetch('https://source.unsplash.com/random/?' + theme);
+	}
+	await sleep(1000);
+	let res3 = await fetch('https://source.unsplash.com/random/?' + theme);
+	while (res1.url === res3.url || res2.url === res3.url) {
+		await sleep(1000);
+		res3 = await fetch('https://source.unsplash.com/random/?' + theme);
+	}
+	await sleep(1000);
+	let res4 = await fetch('https://source.unsplash.com/random/?' + theme);
+	while (res1.url === res4.url || res2.url === res4.url || res3.url === res4.url) {
+		await sleep(1000);
+		res4 = await fetch('https://source.unsplash.com/random/?' + theme);
+	}
+
+	setImage(res1.url);
+	setFakeImage([res2.url, res3.url, res4.url]);
+	write('playerOpinions', new Array(players.length).fill(-1));
+};
