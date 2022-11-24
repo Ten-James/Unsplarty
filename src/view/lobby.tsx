@@ -1,13 +1,12 @@
 import { useContext } from 'react';
 import { DataContext } from './App';
-import { write } from '../firebase';
 import { formSubmit } from '../handlers';
-import { Grid, Paper, Typography, List, ListItem, ListItemText, TextField, Button } from '@mui/material';
-import Navigation from '../components/Navigation';
+import { Grid, Paper, Typography, List, ListItem, ListItemText, TextField, Button, FormControlLabel, Stack } from '@mui/material';
 import Base from '../components/base';
+import { MaterialUISwitch } from '../components/muiSwitch';
 
 const Lobby = () => {
-	const { setGameState, players, userName, setUserName, amIMaster } = useContext(DataContext);
+	const { setGameState, players, userName, setUserName, amIMaster, changeTheme } = useContext(DataContext);
 
 	return (
 		<Base title='Lobby'>
@@ -62,6 +61,7 @@ const Lobby = () => {
 									label='Username'
 									value={userName}
 									onChange={(e) => setUserName(e.target.value)}
+									onSubmit={(e) => e.form.submit()}
 									variant='outlined'
 								/>
 							</Grid>
@@ -95,6 +95,22 @@ const Lobby = () => {
 					Waiting for master to start
 				</Typography>
 			) : null}
+			<Stack
+				direction='row'
+				justifyContent='center'
+				alignItems='center'
+				spacing={2}
+			>
+				<FormControlLabel
+					control={
+						<MaterialUISwitch
+							sx={{ m: 1 }}
+							onChange={(e) => changeTheme(e.target.checked)}
+						/>
+					}
+					label='Theme'
+				/>
+			</Stack>
 		</Base>
 	);
 };

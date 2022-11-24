@@ -8,6 +8,9 @@ import GameSelect from './gameSelect';
 import ThemeSelect from './themeSelect';
 import Game from './game';
 import Result from './result';
+import { ThemeProvider } from '@mui/material';
+import { darkThemeOption, lightThemeOption } from '../theme';
+import { Box } from '@mui/material';
 
 interface DataContextType {
 	myIndex: number;
@@ -29,6 +32,7 @@ interface DataContextType {
 	playerScores: number[];
 	playerStreaks: number[];
 	nextPlayer: () => void;
+	changeTheme: (dark: boolean) => void;
 }
 
 export const DataContext = createContext<DataContextType>({
@@ -51,9 +55,10 @@ export const DataContext = createContext<DataContextType>({
 	playerScores: [],
 	playerStreaks: [],
 	nextPlayer: () => {},
+	changeTheme: () => {},
 });
 
-function App() {
+const App = () => {
 	const [currentPlayer, setCurrentPlayer] = useDatabase<number>('currentPlayer', 0);
 	const [playerOrder, setPlayerOrder] = useDatabase<string[]>('playerOrder', []);
 	const [playerOpinions, setPlayerOpinions] = useDatabase<number[]>('playerOpinions', []);
@@ -66,6 +71,7 @@ function App() {
 
 	const [image, setImage] = useDatabase<string>('image', '');
 	const [fakeImage, setFakeImage] = useDatabase<string[]>('fakeImage', []);
+	const [darkTheme, setDarkTheme] = useState(false);
 
 	const [userName, setUserName] = useState('');
 
@@ -105,22 +111,28 @@ function App() {
 		playerScores,
 		playerStreaks,
 		nextPlayer: () => setCurrentPlayer((currentPlayer + 1) % players.length),
+		changeTheme: (dark) => setDarkTheme(dark),
 	};
 
 	return (
-		<DataContext.Provider value={ContextData}>
-			<div className='App'>
-				{gameState === '' && <Loading />}
-				{gameState === 'lobby' && <Lobby />}
-				{gameState === 'gameSelect' && <GameSelect />}
-				{gameState === 'choosing' && !playerOrder && <Loading />}
-				{gameState === 'choosing' && playerOrder && <ThemeSelect />}
-				{gameState === 'playing' && (!image || !fakeImage) && <Loading />}
-				{gameState === 'playing' && image && fakeImage && <Game />}
-				{gameState === 'results' && <Result />}
-			</div>
-		</DataContext.Provider>
+		<ThemeProvider theme={darkTheme ? darkThemeOption : lightThemeOption}>
+			<DataContext.Provider value={ContextData}>
+				<Box
+					bgcolor={(theme) => theme.palette.background.default}
+					className='App'
+				>
+					{gameState === '' && <Loading />}
+					{gameState === 'lobby' && <Lobby />}
+					{gameState === 'gameSelect' && <GameSelect />}
+					{gameState === 'choosing' && !playerOrder && <Loading />}
+					{gameState === 'choosing' && playerOrder && <ThemeSelect />}
+					{gameState === 'playing' && (!image || !fakeImage) && <Loading />}
+					{gameState === 'playing' && image && fakeImage && <Game />}
+					{gameState === 'results' && <Result />}
+				</Box>
+			</DataContext.Provider>
+		</ThemeProvider>
 	);
-}
+};
 
 export default App;
