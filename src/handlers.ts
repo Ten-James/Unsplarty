@@ -1,47 +1,61 @@
 import { TablePaginationActionsUnstyled } from '@mui/base';
 import { FormEvent } from 'react';
 import { write } from './firebase';
+import { PlayerType } from './view/App';
 
-export const formSubmit = (event: FormEvent<HTMLFormElement>, players: string[], newName: string) => {
+const CreateUUID = () => {
+	return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+		const r = (Math.random() * 16) | 0,
+			v = c == 'x' ? r : (r & 0x3) | 0x8;
+		return v.toString(16);
+	});
+};
+
+export const formSubmit = (event: FormEvent<HTMLFormElement>, players: { [key: string]: PlayerType }, newName: string, setMyUuid: (newUuid: string) => void) => {
 	event.preventDefault();
 	console.log(players, newName);
 	if (!players) {
-		write('players', [newName]);
+		const newUuid = CreateUUID();
+		setMyUuid(newUuid);
+		const newPlayer: PlayerType = { name: newName, lastOption: -1, score: 0, streak: 0 };
+		write(`players/${newUuid}`, newPlayer);
+		write('master', newUuid);
 		return;
 	}
-	if (players?.includes(newName)) {
+	if (Object.values(players).find((player) => player.name === newName)) {
 		alert('Name already taken');
 		return;
 	}
-	const newPlayers = [...players, newName];
-	write('players', newPlayers);
+	const newUuid = CreateUUID();
+	setMyUuid(newUuid);
+	const newPlayer: PlayerType = { name: newName, lastOption: -1, score: 0, streak: 0 };
+	write(`players/${newUuid}`, newPlayer);
 };
 
-export const StartGame = (players: string[]) => {
+export const StartGame = (players: { [key: string]: PlayerType }) => {
 	write('gameState', 'choosing');
 	//random player order
-	const playerOrder = players.sort(() => Math.random() - 0.5);
+	const playerOrder = Object.keys(players).sort(() => Math.random() - 0.5);
 	write('playerOrder', playerOrder);
-	write('currentPlayer', Math.floor(Math.random() * players.length));
+	write('currentPlayer', Math.floor(Math.random() * playerOrder.length));
 	write('theme', '');
 	write('image', '');
 	write('fakeImage', []);
-	write('playerOpinions', new Array(players.length).fill(-1));
-	write('playerScores', new Array(players.length).fill(0));
-	write('playerStreaks', new Array(players.length).fill(0));
 };
 
-export const onPlayerVote = (playerIndex: number, urlIndex: number, timer: number, playerScores: number[], playerStreaks: number[]) => {
-	const Value = (timer * 10 + 100) * Math.pow(1.1, playerStreaks[playerIndex]);
-	write(`playerOpinions/${playerIndex}`, urlIndex);
-	if (urlIndex === 0) {
-		write(`playerScores/${playerIndex}`, playerScores[playerIndex] + Value);
-		if (timer !== 0) write(`playerStreaks/${playerIndex}`, playerStreaks[playerIndex] + 1);
-	} else write(`playerStreaks/${playerIndex}`, 0);
+export const onPlayerVote = (uuid: string, player: PlayerType | undefined, vote: number, timer: number) => {
+	if (!player) return;
+	player = player as PlayerType;
+	const Value = (timer * 10 + 100) * Math.pow(1.1, player.streak);
+	write(`players/${uuid}/lastOpinion`, vote);
+	if (vote === 0) {
+		write(`players/${uuid}/score`, player.score + Value);
+		if (timer !== 0) write(`players/${uuid}/streaks`, player.streak + 1);
+	} else write(`players/${uuid}/streaks`, 0);
 };
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-export const Handler = async (theme: string, players: string[], setGameState: (state: string) => void, setImage: (url: string) => void, setFakeImage: (urls: string[]) => void) => {
+export const Handler = async (theme: string, players: { [key: string]: PlayerType }, setGameState: (state: string) => void, setImage: (url: string) => void, setFakeImage: (urls: string[]) => void) => {
 	setGameState('playing');
 	write('theme', theme);
 	const res1 = await fetch('https://source.unsplash.com/random/?' + theme);
@@ -66,5 +80,8 @@ export const Handler = async (theme: string, players: string[], setGameState: (s
 
 	setImage(res1.url);
 	setFakeImage([res2.url, res3.url, res4.url]);
-	write('playerOpinions', new Array(players.length).fill(-1));
+
+	Object.keys(players).forEach((uuid) => {
+		write(`players/${uuid}/lastOpinion`, -1);
+	});
 };

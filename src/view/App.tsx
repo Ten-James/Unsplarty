@@ -13,28 +13,29 @@ import { Box } from '@mui/material';
 
 import { DataContext, DataContextType } from '../ContextData';
 
+export interface PlayerType {
+	name: string;
+	lastOption: number;
+	score: number;
+	streak: number;
+}
 const App = () => {
 	const [currentPlayer, setCurrentPlayer] = useDatabase<number>('currentPlayer', 0);
 	const [playerOrder, setPlayerOrder] = useDatabase<string[]>('playerOrder', []);
-	const [playerOpinions, setPlayerOpinions] = useDatabase<number[]>('playerOpinions', []);
-	const [playerScores, setPlayerScores] = useDatabase<number[]>('playerScores', []);
-	const [playerStreaks, setPlayerStreaks] = useDatabase<number[]>('playerStreaks', []);
 
 	const [gameState, setGameState] = useDatabase<string>('gameState', '');
-	const [players, setPlayers] = useDatabase<string[]>('players', []);
+	const [players, setPlayers] = useDatabase<{ [key: string]: PlayerType }>('players', {});
 	const [currentGame, setCurrentGame] = useDatabase('talking', '');
+	const [master, setMaster] = useDatabase('master', '');
 
 	const [image, setImage] = useDatabase<string>('image', '');
 	const [fakeImage, setFakeImage] = useDatabase<string[]>('fakeImage', []);
 	const [darkTheme, setDarkTheme] = useState(true);
+	const [myUuid, setMyUuid] = useState<string>('');
 
 	const [userName, setUserName] = useState('');
 
-	const amIMaster = players !== null && players[0] == userName;
-
-	useEffect(() => {
-		console.log(userName, players);
-	}, [userName, players]);
+	const amIMaster = master === myUuid;
 
 	if (userName === '' && !['lobby', ''].includes(gameState)) {
 		return (
@@ -45,7 +46,8 @@ const App = () => {
 	}
 
 	const ContextData: DataContextType = {
-		myIndex: players !== null ? players.indexOf(userName) : -1,
+		myUuid,
+		setMyUuid,
 		userName,
 		setUserName,
 		gameState,
@@ -58,14 +60,11 @@ const App = () => {
 		setImage,
 		setFakeImage,
 		amIMaster,
-		amIChooser: playerOrder !== null && playerOrder[currentPlayer] === userName,
+		amIChooser: playerOrder !== null && playerOrder[currentPlayer] === myUuid,
 		onVote: (vote, timer) => {
-			onPlayerVote(players.indexOf(userName), vote, timer, playerScores, playerStreaks);
+			onPlayerVote(myUuid, players[myUuid], vote, timer);
 		},
-		playerOpinions,
-		playerScores,
-		playerStreaks,
-		nextPlayer: () => setCurrentPlayer((currentPlayer + 1) % players.length),
+		nextPlayer: () => setCurrentPlayer((currentPlayer + 1) % playerOrder.length),
 		theme: darkTheme,
 		changeTheme: (dark) => setDarkTheme(dark),
 	};

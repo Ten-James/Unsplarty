@@ -1,5 +1,6 @@
-import { Button, List, ListItem, ListItemText, Typography } from '@mui/material';
+import { Button, List, ListItem, ListItemText, Typography, useTheme } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
+import { Bar, BarChart, CartesianGrid, Legend, XAxis, YAxis, Tooltip } from 'recharts';
 import Base from '../../components/base';
 import { DataContext } from '../../ContextData';
 
@@ -10,30 +11,33 @@ interface PlayerViewType {
 }
 
 const Result = () => {
-	const { players, playerScores, playerOpinions, amIMaster, setGameState, nextPlayer } = useContext(DataContext);
-	const [PlayerView, setPlayerView] = useState<PlayerViewType[]>([]);
-	useEffect(() => {
-		if (players && playerScores) {
-			const tempPlayerView: PlayerViewType[] = [];
-			[...players].forEach((player, index) => {
-				tempPlayerView.push({
-					name: player,
-					score: Math.floor(playerScores[index]),
-					playerOpinion: playerOpinions[index],
-				});
-			});
-			setPlayerView(tempPlayerView.sort((a, b) => b.score - a.score));
-		}
-	}, [players, playerScores]);
+	const { players, amIMaster, setGameState, nextPlayer } = useContext(DataContext);
+	const theme = useTheme();
 
 	return (
 		<Base title='Results'>
+			<BarChart
+				width={730}
+				height={250}
+				data={Object.values(players)}
+			>
+				<CartesianGrid />
+				<XAxis dataKey='name' />
+				<YAxis />
+				<Bar
+					dataKey='score'
+					maxBarSize={50}
+					fill={theme.palette.primary.main}
+				/>
+			</BarChart>
 			<List>
-				{PlayerView.map((player) => (
-					<ListItem key={player.name}>
-						<ListItemText primary={`${player.name} ${player.score}`} />
-					</ListItem>
-				))}
+				{Object.values(players)
+					.sort((a, b) => b.score - a.score)
+					.map((player) => (
+						<ListItem key={player.name}>
+							<ListItemText primary={`${player.name} has ${Math.floor(player.score)} Points.`} />
+						</ListItem>
+					))}
 			</List>
 			{amIMaster ? (
 				<Button

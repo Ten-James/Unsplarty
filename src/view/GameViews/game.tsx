@@ -5,7 +5,7 @@ import Base from '../../components/base';
 import { HeaderText } from '../../components/plaingText';
 
 export default function Game() {
-	const { amIChooser, imageUrls, onVote, setGameState, playerOpinions } = useContext(DataContext);
+	const { amIChooser, imageUrls, onVote, setGameState, players } = useContext(DataContext);
 	const [timer, setTimer] = useState(100);
 	const [images, setImages] = useState([...imageUrls].sort(() => Math.random() - 0.5));
 	const [Phase, setPhase] = useState(0);
@@ -23,7 +23,7 @@ export default function Game() {
 		return () => clearInterval(interval);
 	}, []);
 	if (amIChooser) {
-		if (timer <= 0 || playerOpinions.every((opinion) => opinion !== -1)) setGameState('results');
+		if (timer <= 0 || Object.values(players).every((player) => player.lastOption !== -1)) setGameState('results');
 
 		if (Phase === 0)
 			return (

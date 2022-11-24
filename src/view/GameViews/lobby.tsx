@@ -7,30 +7,30 @@ import { MaterialUISwitch } from '../../components/muiSwitch';
 import { HeaderText, PlainText } from '../../components/plaingText';
 
 const Lobby = () => {
-	const { setGameState, players, userName, setUserName, amIMaster, changeTheme, theme } = useContext(DataContext);
+	const { setGameState, players, userName, setUserName, amIMaster, changeTheme, theme, setMyUuid, myUuid } = useContext(DataContext);
 
 	return (
 		<Base title='Lobby'>
 			<HeaderText text='Players' />
 			{players ? (
 				<List>
-					{players.map((player) => (
-						<ListItem key={player}>
-							<ListItemText primary={player} />
+					{Object.values(players).map((player) => (
+						<ListItem key={player.name}>
+							<ListItemText primary={player.name} />
 						</ListItem>
 					))}
 				</List>
 			) : (
 				<PlainText text='No players yet' />
 			)}
-			{players?.includes(userName) ? (
+			{players && Object.keys(players).includes(myUuid) ? (
 				<PlainText text='Youre in the game!' />
 			) : (
 				<Paper
 					style={{ padding: '1rem' }}
 					elevation={2}
 				>
-					<form onSubmit={(e) => formSubmit(e, players, userName)}>
+					<form onSubmit={(e) => formSubmit(e, players, userName, setMyUuid)}>
 						<Stack
 							direction='column'
 							justifyContent='center'
