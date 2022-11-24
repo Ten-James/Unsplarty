@@ -47,6 +47,7 @@ const App = () => {
 
 	const ContextData: DataContextType = {
 		myUuid,
+		me: players[myUuid],
 		setMyUuid,
 		userName,
 		setUserName,

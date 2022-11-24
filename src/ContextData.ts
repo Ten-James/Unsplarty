@@ -3,6 +3,7 @@ import { PlayerType } from './view/App';
 export interface DataContextType {
 	myUuid: string;
 	setMyUuid: (newUuid: string) => void;
+	me: PlayerType;
 	userName: string;
 	setUserName: (name: string) => void;
 	gameState: string;
@@ -25,6 +26,7 @@ export interface DataContextType {
 export const DataContext = createContext<DataContextType>({
 	myUuid: '',
 	setMyUuid: () => {},
+	me: { name: '', lastOption: -1, score: 0, streak: 0 },
 	userName: '',
 	setUserName: () => {},
 	gameState: '',
