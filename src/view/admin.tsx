@@ -1,25 +1,28 @@
-import { write } from "../firebase";
+import { write } from '../firebase';
 
 const Admin = () => {
-  return (
-    <div>
-      <h1>Admin</h1>
-      <button
-        onClick={() => {
-          write("gameState", "lobby");
-          write("players", []);
-          write("theme", "");
-          write("image", "");
-          write("playerOrder", []);
-          write("fakeImage", []);
+	return (
+		<div>
+			<h1>Admin</h1>
+			<button
+				onClick={() => {
+					write('gameState', 'lobby');
+					write('players', []);
+					write('theme', '');
+					write('image', '');
+					write('playerOrder', []);
+					write('fakeImage', []);
+					write('playerOpinions', []);
+					write('playerScores', []);
+					write('playerStreaks', []);
 
-          // redirect to lobby
-          setTimeout(() => (window.location.href = "/"), 2000);
-        }}
-      >
-        Reset
-      </button>
-    </div>
-  );
+					// redirect to lobby
+					setTimeout(() => (window.location.href = '/'), 2000);
+				}}
+			>
+				Reset
+			</button>
+		</div>
+	);
 };
 export default Admin;

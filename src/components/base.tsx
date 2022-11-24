@@ -1,10 +1,15 @@
-import Navigation from '../components/Navigation';
 import { Grid, Paper } from '@mui/material';
+import Navigation from './Navigation';
 
-export default function temp() {
+interface BaseProps {
+	title: string;
+	children: React.ReactNode;
+}
+
+const Base = ({ title, children }: BaseProps) => {
 	return (
 		<>
-			<Navigation title='UnsPLARTY' />
+			<Navigation title={title} />
 			<Grid
 				container
 				spacing={2}
@@ -16,10 +21,12 @@ export default function temp() {
 						elevation={3}
 						style={{ padding: '2rem' }}
 					>
-						<div></div>
+						{children}
 					</Paper>
 				</Grid>
 			</Grid>
 		</>
 	);
-}
+};
+
+export default Base;

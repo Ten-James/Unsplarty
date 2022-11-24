@@ -1,75 +1,91 @@
-import { useEffect, useContext } from 'react';
+import { useEffect, useContext, useState } from 'react';
 import { DataContext } from './App';
 import Navigation from '../components/Navigation';
-import { Grid, Paper, Typography } from '@mui/material';
+import { Grid, Paper, Typography, ImageList, ImageListItem, LinearProgress } from '@mui/material';
+import Base from '../components/base';
 
 export default function Game() {
-	const { amIChooser, imageUrls } = useContext(DataContext);
-	useEffect(() => {
-		if (amIChooser) setTimeout(() => document.getElementById('mainPicture')?.remove(), 3000);
+	const { amIChooser, imageUrls, onVote, setGameState, playerOpinions } = useContext(DataContext);
+	const [timer, setTimer] = useState(100);
+	const [images, setImages] = useState([...imageUrls].sort(() => Math.random() - 0.5));
+	const [Phase, setPhase] = useState(0);
+	const [chosenImage, setChosenImage] = useState('');
 
-		return () => {};
+	useEffect(() => {
+		if (amIChooser) onVote(0, 0);
+		let interval: NodeJS.Timer;
+		setTimeout(() => {
+			setPhase(1);
+			interval = setInterval(() => {
+				setTimer((timer) => timer - 0.1);
+			}, 10);
+		}, 2000);
+		return () => clearInterval(interval);
 	}, []);
+	if (amIChooser) {
+		if (timer <= 0 || playerOpinions.every((opinion) => opinion !== -1)) setGameState('results');
+
+		if (Phase === 0)
+			return (
+				<Base title='Game'>
+					<img
+						id='mainPicture'
+						src={imageUrls[0]}
+						style={{ maxWidth: '50%', maxHeight: '50%', display: 'block', margin: '2em auto' }}
+						alt=''
+					/>
+				</Base>
+			);
+		return (
+			<Base title='Game'>
+				<Typography>Describe the picture</Typography>
+				<LinearProgress
+					variant='determinate'
+					value={timer}
+				/>
+			</Base>
+		);
+	}
+
+	if (Phase === 0) {
+		return (
+			<Base title='Game'>
+				<Typography>Prepare for pictures</Typography>
+			</Base>
+		);
+	}
 
 	return (
-		<>
-			<Navigation title='Game' />
-			<Grid
-				container
-				spacing={2}
-				justifyContent='center'
-				alignItems='center'
-			>
-				<Grid item>
-					<Paper
-						elevation={3}
-						style={{ padding: '2rem' }}
-					>
-						<div>
-							{amIChooser ? (
-								<>
-									<Typography
-										variant='h4'
-										align='center'
-									>
-										Describe this picture
-									</Typography>
-									<div>
-										<img
-											id='mainPicture'
-											src={imageUrls[0]}
-											style={{ maxWidth: '50%', maxHeight: '50%' }}
-											alt='
-                            '
-										/>
-									</div>
-								</>
-							) : (
-								<>
-									<Typography
-										variant='h4'
-										align='center'
-									>
-										Guess the correct image
-									</Typography>
-									<div>
-										{imageUrls
-											.sort(() => Math.random() - 0.5)
-											.map((url) => (
-												<img
-													src={url}
-													style={{ maxWidth: '30%', maxHeight: '50%' }}
-													alt='
-                            '
-												/>
-											))}
-									</div>
-								</>
-							)}
-						</div>
-					</Paper>
-				</Grid>
-			</Grid>
-		</>
+		<Base title='Game'>
+			{chosenImage ? (
+				<Typography align='center'>I Choosed</Typography>
+			) : (
+				<ImageList
+					variant='masonry'
+					cols={2}
+					gap={1}
+					sx={{ width: '80vw' }}
+				>
+					{images.map((url) => (
+						<ImageListItem
+							key={url}
+							onClick={() => {
+								setChosenImage(url);
+								onVote(imageUrls.indexOf(url), timer);
+							}}
+						>
+							<img
+								src={url}
+								alt=''
+							/>
+						</ImageListItem>
+					))}
+				</ImageList>
+			)}
+			<LinearProgress
+				variant='determinate'
+				value={timer}
+			/>
+		</Base>
 	);
 }

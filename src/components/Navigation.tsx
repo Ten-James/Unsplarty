@@ -11,36 +11,38 @@ interface Props {
 }
 
 export default function Navigation({ title }: Props) {
-	const { amIMaster, userName } = useContext(DataContext);
+	const { amIMaster, userName, playerScores, playerStreaks, myIndex } = useContext(DataContext);
 	return (
 		<Grid
 			item
 			sx={{ flexGrow: 1 }}
 		>
-			<AppBar position='static'>
+			<AppBar position='fixed'>
 				<Toolbar>
 					<Typography
 						variant='h6'
 						component='div'
 						sx={{ flexGrow: 1 }}
 					>
-						Unsplarty {title}
+						U {title}
 					</Typography>
-					{amIMaster ? (
+					{playerScores && playerStreaks && (
 						<Typography
 							variant='h6'
 							component='div'
+							sx={{ flexGrow: 1, textAlign: 'center', fontSize: '0.75em' }}
 						>
-							Master: {userName}
-						</Typography>
-					) : (
-						<Typography
-							variant='h6'
-							component='div'
-						>
-							{userName}
+							Score: {Math.floor(playerScores[myIndex])}
+							<br></br> Streak: {playerStreaks[myIndex]}
 						</Typography>
 					)}
+					<Typography
+						variant='h6'
+						component='div'
+						sx={{ flexGrow: 1, textAlign: 'right' }}
+					>
+						{(amIMaster ? 'M:' : '') + userName}
+					</Typography>
 				</Toolbar>
 			</AppBar>
 		</Grid>
