@@ -1,9 +1,7 @@
 import { useContext } from 'react';
 import { DataContext } from '../../ContextData';
 import { StartGame } from '../../handlers';
-import { Grid, Paper, Button, ButtonGroup, Typography } from '@mui/material';
-import Navigation from '../../components/Navigation';
-import { Container } from '@mui/system';
+import { Grid, Button, ButtonGroup, Typography } from '@mui/material';
 import Base from '../../components/base';
 import { HeaderText, PlainText } from '../../components/Typography';
 import { GAMEMODES, getGameModeDescription } from '../../utils';

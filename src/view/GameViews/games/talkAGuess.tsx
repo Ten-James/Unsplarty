@@ -1,6 +1,6 @@
 import { useEffect, useContext, useState } from 'react';
 import { DataContext } from '../../../ContextData';
-import { Grid, Paper, Typography, ImageList, ImageListItem, LinearProgress } from '@mui/material';
+import { ImageList, ImageListItem, LinearProgress } from '@mui/material';
 import Base from '../../../components/base';
 import { HeaderText } from '../../../components/Typography';
 

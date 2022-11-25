@@ -1,8 +1,6 @@
-import { useState, useEffect, lazy, Suspense } from 'react';
+import { useState, useEffect } from 'react';
 import { useDatabase } from '../hooks/useDatabase';
 import { onPlayerVote } from '../handlers';
-import { ThemeProvider } from '@mui/material';
-import { darkThemeOption, lightThemeOption } from '../theme';
 import { Box } from '@mui/material';
 
 import { DataContext, DataContextType } from '../ContextData';
@@ -19,7 +17,12 @@ export interface PlayerType {
 	streak: number;
 	loaded: boolean;
 }
-const App = () => {
+
+interface AppProps {
+	darkTheme: boolean;
+	setDarkTheme: (darkTheme: boolean) => void;
+}
+const App = ({ darkTheme, setDarkTheme }: AppProps) => {
 	const [currentPlayer, setCurrentPlayer] = useDatabase<number>('currentPlayer', 0);
 	const [playerOrder, setPlayerOrder] = useDatabase<string[]>('playerOrder', []);
 
@@ -32,7 +35,6 @@ const App = () => {
 	const [requiredImages, setRequiredImages] = useDatabase<number>('requiredImages', 0);
 	const [fakeImage, setFakeImage] = useDatabase<string[]>('fakeImage', []);
 	const [myUuid, setMyUuid] = useState<string>('');
-	const [darkTheme, setDarkTheme] = useState(true);
 
 	const [userName, setUserName] = useState(getLocalName());
 
@@ -81,25 +83,23 @@ const App = () => {
 	};
 
 	return (
-		<ThemeProvider theme={darkTheme ? darkThemeOption : lightThemeOption}>
-			<DataContext.Provider value={ContextData}>
-				<Box
-					bgcolor={(theme) => theme.palette.background.default}
-					className='App'
-				>
-					<Routes>
-						<Route
-							path='/admin'
-							element={<Admin />}
-						/>
-						<Route
-							path='/'
-							element={<GameViews areImagesLoaded={players && Object.values(players).every((p) => p.loaded)} />}
-						/>
-					</Routes>
-				</Box>
-			</DataContext.Provider>
-		</ThemeProvider>
+		<DataContext.Provider value={ContextData}>
+			<Box
+				bgcolor={(theme) => theme.palette.background.default}
+				className='App'
+			>
+				<Routes>
+					<Route
+						path='/admin'
+						element={<Admin />}
+					/>
+					<Route
+						path='/'
+						element={<GameViews areImagesLoaded={players && Object.values(players).every((p) => p.loaded)} />}
+					/>
+				</Routes>
+			</Box>
+		</DataContext.Provider>
 	);
 };
 

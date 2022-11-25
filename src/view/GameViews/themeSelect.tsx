@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect } from 'react';
 import { DataContext } from '../../ContextData';
-import { Grid, Paper, Typography, Button, ButtonGroup } from '@mui/material';
+import { Button, ButtonGroup } from '@mui/material';
 import Base from '../../components/base';
 import { HeaderText } from '../../components/Typography';
 import { Handler } from '../../handlers';

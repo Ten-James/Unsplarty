@@ -1,6 +1,9 @@
 export const getLocalName = () => localStorage.getItem('lastUserName') || '';
 export const setLocalName = (name: string) => localStorage.setItem('lastUserName', name);
 
+export const getLocalTheme = () => localStorage.getItem('lastTheme') === 'true' || false;
+export const setLocalTheme = (dark: boolean) => localStorage.setItem('lastTheme', dark.toString());
+
 export const CreateUUID = () => {
 	return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
 		const r = (Math.random() * 16) | 0,

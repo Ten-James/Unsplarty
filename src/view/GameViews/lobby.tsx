@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { DataContext } from '../../ContextData';
 import { formSubmit } from '../../handlers';
-import { Grid, Paper, Typography, List, ListItem, ListItemText, TextField, Button, FormControlLabel, Stack } from '@mui/material';
+import { Paper, List, ListItem, ListItemText, TextField, Button, FormControlLabel, Stack } from '@mui/material';
 import Base from '../../components/base';
 import { MaterialUISwitch } from '../../components/muiSwitch';
 import { HeaderText, PlainText } from '../../components/Typography';

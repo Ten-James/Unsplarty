@@ -1,9 +1,8 @@
-import { Button, LinearProgress, List, ListItem, ListItemText, Paper, Typography, useTheme } from '@mui/material';
-import React, { useContext, useEffect, useState } from 'react';
+import { Button, LinearProgress, Typography } from '@mui/material';
+import React, { useContext } from 'react';
 import Base from '../../components/base';
 import { PlainText } from '../../components/Typography';
 import { DataContext } from '../../ContextData';
-import { write } from '../../firebase';
 import { newRound } from '../../handlers';
 
 interface PlayerViewType {

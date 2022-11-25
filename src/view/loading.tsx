@@ -1,5 +1,5 @@
 import Navigation from '../components/Navigation';
-import { Grid, Typography, CircularProgress, Box } from '@mui/material';
+import { Grid, Typography, Box } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { DataContext } from '../ContextData';
 import { loadingQuotes } from '../utils';
