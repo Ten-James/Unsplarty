@@ -2,14 +2,9 @@ import { useState, useContext, useEffect } from 'react';
 import { DataContext } from '../../ContextData';
 import { Grid, Paper, Typography, Button, ButtonGroup } from '@mui/material';
 import Base from '../../components/base';
-import { HeaderText } from '../../components/plaingText';
+import { HeaderText } from '../../components/Typography';
 import { Handler } from '../../handlers';
-const get3Themes = () => {
-	// find api for that
-	const themes = ['Civilization', 'Studio', 'Garden', 'Animal', 'Vegetable', 'Mineral', 'Fruit', 'Vehicle', 'Weapon', 'Furniture', 'Clothing', 'Food', 'Flower', 'Tree', 'Bird', 'Fish', 'Buildings', 'Sports'];
-
-	return [themes[Math.floor(Math.random() * themes.length)], themes[Math.floor(Math.random() * themes.length)], themes[Math.floor(Math.random() * themes.length)]];
-};
+import { get3Themes } from '../../utils';
 
 export default function ThemeSelect() {
 	const { setImage, setGameState, setFakeImage, amIChooser, players } = useContext(DataContext);

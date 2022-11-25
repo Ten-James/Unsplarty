@@ -1,15 +1,7 @@
-import { TablePaginationActionsUnstyled } from '@mui/base';
 import { FormEvent } from 'react';
 import { write } from './firebase';
+import { CreateUUID, getBase64FromUrl, setLocalName, sleep } from './utils';
 import { PlayerType } from './view/App';
-
-const CreateUUID = () => {
-	return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-		const r = (Math.random() * 16) | 0,
-			v = c == 'x' ? r : (r & 0x3) | 0x8;
-		return v.toString(16);
-	});
-};
 
 export const formSubmit = (event: FormEvent<HTMLFormElement>, players: { [key: string]: PlayerType }, newName: string, setMyUuid: (newUuid: string) => void) => {
 	event.preventDefault();
@@ -17,7 +9,8 @@ export const formSubmit = (event: FormEvent<HTMLFormElement>, players: { [key: s
 	if (!players) {
 		const newUuid = CreateUUID();
 		setMyUuid(newUuid);
-		const newPlayer: PlayerType = { name: newName, lastOption: -1, score: 0, streak: 0 };
+		setLocalName(newName);
+		const newPlayer: PlayerType = { name: newName, lastOption: -1, score: 0, streak: 0, loaded: false };
 		write(`players/${newUuid}`, newPlayer);
 		write('master', newUuid);
 		return;
@@ -28,7 +21,8 @@ export const formSubmit = (event: FormEvent<HTMLFormElement>, players: { [key: s
 	}
 	const newUuid = CreateUUID();
 	setMyUuid(newUuid);
-	const newPlayer: PlayerType = { name: newName, lastOption: -1, score: 0, streak: 0 };
+	setLocalName(newName);
+	const newPlayer: PlayerType = { name: newName, lastOption: -1, score: 0, streak: 0, loaded: false };
 	write(`players/${newUuid}`, newPlayer);
 };
 
@@ -54,7 +48,6 @@ export const onPlayerVote = (uuid: string, player: PlayerType | undefined, vote:
 	} else write(`players/${uuid}/streaks`, 0);
 };
 
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 export const Handler = async (theme: string, players: { [key: string]: PlayerType }, setGameState: (state: string) => void, setImage: (url: string) => void, setFakeImage: (urls: string[]) => void) => {
 	setGameState('playing');
 	write('theme', theme);
@@ -77,11 +70,20 @@ export const Handler = async (theme: string, players: { [key: string]: PlayerTyp
 		await sleep(1000);
 		res4 = await fetch('https://source.unsplash.com/random/?' + theme);
 	}
+	let data1 = await getBase64FromUrl(res1.url);
+	let data2 = await getBase64FromUrl(res2.url);
+	let data3 = await getBase64FromUrl(res3.url);
+	let data4 = await getBase64FromUrl(res4.url);
+	setImage(data1);
+	setFakeImage([data2, data3, data4]);
+	write('requiredImages', 4);
+};
 
-	setImage(res1.url);
-	setFakeImage([res2.url, res3.url, res4.url]);
-
+export const newRound = (players: { [key: string]: PlayerType }, nextPlayer: () => void, setGameState: (str: string) => void) => {
+	nextPlayer();
+	setGameState('choosing');
 	Object.keys(players).forEach((uuid) => {
 		write(`players/${uuid}/lastOpinion`, -1);
+		write(`players/${uuid}/loaded`, false);
 	});
 };

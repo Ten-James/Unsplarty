@@ -4,10 +4,10 @@ import { formSubmit } from '../../handlers';
 import { Grid, Paper, Typography, List, ListItem, ListItemText, TextField, Button, FormControlLabel, Stack } from '@mui/material';
 import Base from '../../components/base';
 import { MaterialUISwitch } from '../../components/muiSwitch';
-import { HeaderText, PlainText } from '../../components/plaingText';
+import { HeaderText, PlainText } from '../../components/Typography';
 
 const Lobby = () => {
-	const { setGameState, players, userName, setUserName, amIMaster, changeTheme, theme, setMyUuid, myUuid } = useContext(DataContext);
+	const { setGameState, players, userName, setUserName, amIMaster, changeTheme, theme, setMyUuid, me } = useContext(DataContext);
 
 	return (
 		<Base title='Lobby'>
@@ -23,7 +23,7 @@ const Lobby = () => {
 			) : (
 				<PlainText text='No players yet' />
 			)}
-			{players && Object.keys(players).includes(myUuid) ? (
+			{me ? (
 				<PlainText text='Youre in the game!' />
 			) : (
 				<Paper
@@ -65,7 +65,7 @@ const Lobby = () => {
 					Start
 				</Button>
 			) : players ? (
-				<PlainText text='Waiting for master to start' />
+				<PlainText text={me ? 'Waiting for master to start' : 'Hurry till master starts game.'} />
 			) : null}
 			<Stack
 				direction='row'

@@ -1,10 +1,10 @@
 import { useEffect, useContext, useState } from 'react';
-import { DataContext } from '../../ContextData';
+import { DataContext } from '../../../ContextData';
 import { Grid, Paper, Typography, ImageList, ImageListItem, LinearProgress } from '@mui/material';
-import Base from '../../components/base';
-import { HeaderText } from '../../components/plaingText';
+import Base from '../../../components/base';
+import { HeaderText } from '../../../components/Typography';
 
-export default function Game() {
+export default function TalkAGuess() {
 	const { amIChooser, imageUrls, onVote, setGameState, players } = useContext(DataContext);
 	const [timer, setTimer] = useState(100);
 	const [images, setImages] = useState([...imageUrls].sort(() => Math.random() - 0.5));

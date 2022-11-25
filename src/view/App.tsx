@@ -1,23 +1,23 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { useDatabase } from '../hooks/useDatabase';
 import { onPlayerVote } from '../handlers';
-import Lobby from './GameViews/lobby';
-import Loading from './loading';
-import GameSelect from './GameViews/gameSelect';
-import ThemeSelect from './GameViews/themeSelect';
-import Game from './GameViews/game';
-import Result from './GameViews/result';
 import { ThemeProvider } from '@mui/material';
 import { darkThemeOption, lightThemeOption } from '../theme';
 import { Box } from '@mui/material';
 
 import { DataContext, DataContextType } from '../ContextData';
+import { Route, Routes } from 'react-router-dom';
+import Admin from './admin';
+import GameViews from './GameViews';
+import { write } from '../firebase';
+import { getLocalName } from '../utils';
 
 export interface PlayerType {
 	name: string;
 	lastOption: number;
 	score: number;
 	streak: number;
+	loaded: boolean;
 }
 const App = () => {
 	const [currentPlayer, setCurrentPlayer] = useDatabase<number>('currentPlayer', 0);
@@ -29,11 +29,12 @@ const App = () => {
 	const [master, setMaster] = useDatabase('master', '');
 
 	const [image, setImage] = useDatabase<string>('image', '');
+	const [requiredImages, setRequiredImages] = useDatabase<number>('requiredImages', 0);
 	const [fakeImage, setFakeImage] = useDatabase<string[]>('fakeImage', []);
-	const [darkTheme, setDarkTheme] = useState(true);
 	const [myUuid, setMyUuid] = useState<string>('');
+	const [darkTheme, setDarkTheme] = useState(true);
 
-	const [userName, setUserName] = useState('');
+	const [userName, setUserName] = useState(getLocalName());
 
 	const amIMaster = master === myUuid;
 
@@ -45,12 +46,21 @@ const App = () => {
 		);
 	}
 
+	useEffect(() => {
+		if (image !== '') {
+			if (fakeImage !== null && fakeImage.length === requiredImages - 1) {
+				write('players/' + myUuid + '/loaded', true);
+			}
+		}
+	}, [image, fakeImage, requiredImages]);
+
 	const ContextData: DataContextType = {
 		myUuid,
-		me: players[myUuid],
+		me: players ? players[myUuid] : undefined,
 		setMyUuid,
 		userName,
 		setUserName,
+		playerOrder,
 		gameState,
 		setGameState,
 		currentGame,
@@ -77,14 +87,16 @@ const App = () => {
 					bgcolor={(theme) => theme.palette.background.default}
 					className='App'
 				>
-					{gameState === '' && <Loading />}
-					{gameState === 'lobby' && <Lobby />}
-					{gameState === 'gameSelect' && <GameSelect />}
-					{gameState === 'choosing' && !playerOrder && <Loading />}
-					{gameState === 'choosing' && playerOrder && <ThemeSelect />}
-					{gameState === 'playing' && (!image || !fakeImage) && <Loading />}
-					{gameState === 'playing' && image && fakeImage && <Game />}
-					{gameState === 'results' && <Result />}
+					<Routes>
+						<Route
+							path='/admin'
+							element={<Admin />}
+						/>
+						<Route
+							path='/'
+							element={<GameViews areImagesLoaded={players && Object.values(players).every((p) => p.loaded)} />}
+						/>
+					</Routes>
 				</Box>
 			</DataContext.Provider>
 		</ThemeProvider>

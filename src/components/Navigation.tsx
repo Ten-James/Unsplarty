@@ -19,30 +19,52 @@ export default function Navigation({ title }: Props) {
 		>
 			<AppBar position='fixed'>
 				<Toolbar>
-					<Typography
-						variant='h6'
-						component='div'
-						sx={{ flexGrow: 1 }}
-					>
-						U {title}
-					</Typography>
 					{me ? (
-						<Typography
-							variant='h6'
-							component='div'
-							sx={{ flexGrow: 1, textAlign: 'center', fontSize: '0.75em' }}
-						>
-							Score: {Math.floor(me.score)}
-							<br></br> Streak: {me.streak}
-						</Typography>
-					) : null}
-					<Typography
-						variant='h6'
-						component='div'
-						sx={{ flexGrow: 1, textAlign: 'right' }}
-					>
-						{(amIMaster ? 'M:' : '') + me.name}
-					</Typography>
+						<>
+							<Typography
+								variant='h6'
+								component='div'
+								sx={{ flexGrow: 1 }}
+							>
+								U {title}
+							</Typography>
+
+							<Typography
+								variant='h6'
+								component='div'
+								sx={{ flexGrow: 1, textAlign: 'center', fontSize: '0.75em' }}
+							>
+								Score: {Math.floor(me.score)}
+								<br></br> Streak: {me.streak}
+							</Typography>
+							<Typography
+								variant='h6'
+								component='div'
+								sx={{ flexGrow: 1, textAlign: 'right' }}
+							>
+								{(amIMaster ? 'M:' : '') + me.name}
+							</Typography>
+						</>
+					) : (
+						<>
+							<Typography
+								variant='h6'
+								component='div'
+								align='center'
+								sx={{ flexGrow: 1 }}
+							>
+								UNSPLARTY
+							</Typography>
+							<Typography
+								variant='h6'
+								component='div'
+								align='center'
+								sx={{ flexGrow: 1 }}
+							>
+								still in demo...
+							</Typography>
+						</>
+					)}
 				</Toolbar>
 			</AppBar>
 		</Grid>

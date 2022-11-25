@@ -1,8 +1,10 @@
-import { Button, List, ListItem, ListItemText, Typography, useTheme } from '@mui/material';
-import { useContext, useEffect, useState } from 'react';
-import { Bar, BarChart, CartesianGrid, Legend, XAxis, YAxis, Tooltip } from 'recharts';
+import { Button, LinearProgress, List, ListItem, ListItemText, Paper, Typography, useTheme } from '@mui/material';
+import React, { useContext, useEffect, useState } from 'react';
 import Base from '../../components/base';
+import { PlainText } from '../../components/Typography';
 import { DataContext } from '../../ContextData';
+import { write } from '../../firebase';
+import { newRound } from '../../handlers';
 
 interface PlayerViewType {
 	name: string;
@@ -12,41 +14,26 @@ interface PlayerViewType {
 
 const Result = () => {
 	const { players, amIMaster, setGameState, nextPlayer } = useContext(DataContext);
-	const theme = useTheme();
 
 	return (
 		<Base title='Results'>
-			<BarChart
-				width={730}
-				height={250}
-				data={Object.values(players)}
-			>
-				<CartesianGrid />
-				<XAxis dataKey='name' />
-				<YAxis />
-				<Bar
-					dataKey='score'
-					maxBarSize={50}
-					fill={theme.palette.primary.main}
-				/>
-			</BarChart>
-			<List>
-				{Object.values(players)
-					.sort((a, b) => b.score - a.score)
-					.map((player) => (
-						<ListItem key={player.name}>
-							<ListItemText primary={`${player.name} has ${Math.floor(player.score)} Points.`} />
-						</ListItem>
-					))}
-			</List>
+			{Object.values(players)
+				.sort((a, b) => b.score - a.score)
+				.map((player) => (
+					<React.Fragment key={player.name}>
+						<PlainText text={`${player.name} has ${Math.floor(player.score)} Points.`} />
+						<LinearProgress
+							variant='determinate'
+							value={Math.min(Math.floor(player.score) / 100, 100)}
+						/>
+					</React.Fragment>
+				))}
 			{amIMaster ? (
 				<Button
 					fullWidth
+					sx={{ marginTop: '1rem' }}
 					variant='outlined'
-					onClick={() => {
-						nextPlayer();
-						setGameState('choosing');
-					}}
+					onClick={() => newRound(players, nextPlayer, setGameState)}
 				>
 					Start
 				</Button>

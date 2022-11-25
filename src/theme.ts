@@ -10,6 +10,10 @@ export const lightThemeOption = createTheme({
 		secondary: {
 			main: '#a4265d',
 		},
+		background: {
+			default: '#d5d5d5',
+			paper: '#e5e5e5',
+		},
 	},
 });
 

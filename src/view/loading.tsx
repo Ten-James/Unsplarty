@@ -1,14 +1,15 @@
 import Navigation from '../components/Navigation';
 import { Grid, Typography, CircularProgress, Box } from '@mui/material';
-import { useEffect, useState } from 'react';
-
-const quotes: string[] = ["Yea I'm loading", 'Loading is fun', "You know that it's loading", "Loading is not a bug, it's a feature", 'James is loading', 'Loading is lie', 'Loading is life', 'Loading is love'];
+import { useContext, useEffect, useState } from 'react';
+import { DataContext } from '../ContextData';
+import { loadingQuotes } from '../utils';
 
 export default function Loading() {
-	const [visibleQuote, setVisibleQuote] = useState(quotes[Math.floor(Math.random() * quotes.length)]);
+	const { me } = useContext(DataContext);
+	const [visibleQuote, setVisibleQuote] = useState(loadingQuotes[Math.floor(Math.random() * loadingQuotes.length)]);
 	useEffect(() => {
 		const interval = setInterval(() => {
-			const newQuote = quotes[Math.floor(Math.random() * quotes.length)];
+			const newQuote = loadingQuotes[Math.floor(Math.random() * loadingQuotes.length)];
 			const length = visibleQuote.length;
 			const length2 = newQuote.length;
 			const interval2 = setInterval(() => {
@@ -68,7 +69,7 @@ export default function Loading() {
 						color='primary'
 						className='load5'
 					>
-						{visibleQuote}
+						{me && me.loaded ? 'I am Loaded...' : visibleQuote}
 					</Typography>
 				</Grid>
 			</Grid>

@@ -5,9 +5,8 @@ import { Grid, Paper, Button, ButtonGroup, Typography } from '@mui/material';
 import Navigation from '../../components/Navigation';
 import { Container } from '@mui/system';
 import Base from '../../components/base';
-import { HeaderText } from '../../components/plaingText';
-
-const GAMEMODES = ['talk&guess'];
+import { HeaderText, PlainText } from '../../components/Typography';
+import { GAMEMODES, getGameModeDescription } from '../../utils';
 
 export default function GameSelect() {
 	const { currentGame, setCurrentGame, amIMaster, players, userName } = useContext(DataContext);
@@ -23,17 +22,17 @@ export default function GameSelect() {
 				<ButtonGroup variant='outlined'>
 					{GAMEMODES.map((game) => (
 						<Button
-							key={game}
+							key={game.name}
 							disabled={!amIMaster}
-							color='info'
-							variant={currentGame === game ? 'contained' : 'outlined'}
-							onClick={() => setCurrentGame(game)}
+							variant={currentGame === game.name ? 'contained' : 'outlined'}
+							onClick={() => setCurrentGame(game.name)}
 						>
-							{game}
+							{game.name}
 						</Button>
 					))}
 				</ButtonGroup>
 			</Grid>
+			<PlainText text={getGameModeDescription(currentGame)} />
 			<Grid
 				container
 				justifyContent='center'
