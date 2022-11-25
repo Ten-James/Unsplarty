@@ -40,7 +40,7 @@ const App = ({ darkTheme, setDarkTheme }: AppProps) => {
 
 	const amIMaster = master === myUuid;
 
-	if (userName === '' && !['lobby', ''].includes(gameState)) {
+	if (myUuid === '' && !['lobby', ''].includes(gameState)) {
 		return (
 			<div className='App'>
 				<h1>You are late ask them to reset game</h1>

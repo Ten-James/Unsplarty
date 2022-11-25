@@ -62,7 +62,7 @@ export default function TalkAGuessReversed() {
 			) : (
 				<ImageList
 					variant='masonry'
-					cols={2}
+					cols={window.innerWidth > 1300 ? 4 : 2}
 					gap={1}
 					sx={{ width: '80vw' }}
 				>
