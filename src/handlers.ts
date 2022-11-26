@@ -1,7 +1,9 @@
 import { FormEvent } from 'react';
-import { write } from './firebase';
-import { CreateUUID, getBase64FromUrl, setLocalName, sleep } from './utils';
+import { storeGetCollection, storeGetDocument, storeRead, storeWrite, write } from './firebase';
+import { CreateUUID, getBase64FromUrl, setLocalName, sleep, themes } from './utils';
 import { PlayerType } from './view/App';
+import { createApi } from 'unsplash-js';
+import { Random } from 'unsplash-js/dist/methods/photos/types';
 
 export const formSubmit = (event: FormEvent<HTMLFormElement>, players: { [key: string]: PlayerType }, newName: string, setMyUuid: (newUuid: string) => void) => {
 	event.preventDefault();
@@ -48,36 +50,38 @@ export const onPlayerVote = (uuid: string, player: PlayerType | undefined, vote:
 	} else write(`players/${uuid}/streaks`, 0);
 };
 
-export const Handler = async (theme: string, players: { [key: string]: PlayerType }, setGameState: (state: string) => void, setImage: (url: string) => void, setFakeImage: (urls: string[]) => void) => {
+export const Handler = async (theme: string, players: { [key: string]: PlayerType }, setGameState: (state: string) => void, setImage: (url: string) => void, setFakeImage: (urls: string[]) => void, get4Images: (theme: string)=> string[]) => {
 	setGameState('playing');
 	write('theme', theme);
-	const res1 = await fetch('https://source.unsplash.com/random/?' + theme);
-	await sleep(1000);
-	let res2 = await fetch('https://source.unsplash.com/random/?' + theme);
-	while (res1.url === res2.url) {
-		await sleep(1000);
-		res2 = await fetch('https://source.unsplash.com/random/?' + theme);
-	}
-	await sleep(1000);
-	let res3 = await fetch('https://source.unsplash.com/random/?' + theme);
-	while (res1.url === res3.url || res2.url === res3.url) {
-		await sleep(1000);
-		res3 = await fetch('https://source.unsplash.com/random/?' + theme);
-	}
-	await sleep(1000);
-	let res4 = await fetch('https://source.unsplash.com/random/?' + theme);
-	while (res1.url === res4.url || res2.url === res4.url || res3.url === res4.url) {
-		await sleep(1000);
-		res4 = await fetch('https://source.unsplash.com/random/?' + theme);
-	}
-	let data1 = await getBase64FromUrl(res1.url);
-	let data2 = await getBase64FromUrl(res2.url);
-	let data3 = await getBase64FromUrl(res3.url);
-	let data4 = await getBase64FromUrl(res4.url);
-	setImage(data1);
-	setFakeImage([data2, data3, data4]);
+	const imageUrls = get4Images(theme);
+	const datas = await Promise.all(imageUrls.map((url) => getBase64FromUrl(url)));
+	setImage(datas[0]);
+	setFakeImage([datas[1], datas[2], datas[3]]);
 	write('requiredImages', 4);
 };
+//@ts-ignore
+const unsplash = createApi({accessKey: import.meta.env.VITE_UNSPLASH_ACCESS_KEY});
+
+export const writeAllTemplatesToFirebase = async () => {
+	const templates = [...themes].sort(() => Math.random() - 0.5).slice(0, 50); // api limit;
+	await templates.forEach(async (theme) => {
+	const result = await unsplash.photos.getRandom({query: theme, count: 30});
+	if (result.errors) {
+		console.error(result.errors[0]);
+		return;
+	}
+	const images = (result.response as Random[]).map((photo: any) => photo.urls.regular);
+	console.log(theme, images);
+	const docRef = storeGetDocument("themes", theme);
+	const doc = await storeRead(docRef);
+	let data = {name: theme, images: images};
+	if (doc.exists()) {
+		data = {name: theme, images: [...doc.data()?.images, ...images]};
+	}
+	await storeWrite(docRef, data);
+	});
+};
+
 
 export const newRound = (players: { [key: string]: PlayerType }, nextPlayer: () => void, setGameState: (str: string) => void) => {
 	nextPlayer();

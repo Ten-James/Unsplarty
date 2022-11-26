@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, set, get, onValue } from 'firebase/database';
+import { getDatabase, ref, set, get, onValue  } from 'firebase/database';
+import {getDoc, doc, getFirestore, collection, CollectionReference, DocumentData, DocumentReference, setDoc} from 'firebase/firestore';
 import { PlayerType } from './view/App';
 
 const firebaseConfig = {
@@ -14,6 +15,16 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+const fireStore = getFirestore(app);
+
+export const storeGetCollection = (collectionName: string) => collection(fireStore, collectionName);
+
+export const storeGetDocument = (collectionName: string, documentName: string) => doc(fireStore, collectionName, documentName);
+
+export const storeRead = (document: DocumentReference<DocumentData>) => getDoc(document);
+
+export const storeWrite = (document: DocumentReference<DocumentData>, data: any) => setDoc(document, data);
+
 
 export const write = (path: string, data: any) => {
 	set(ref(db, path), data);

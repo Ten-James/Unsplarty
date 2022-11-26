@@ -4,10 +4,9 @@ import { Button, ButtonGroup } from '@mui/material';
 import Base from '../../components/base';
 import { HeaderText } from '../../components/Typography';
 import { Handler } from '../../handlers';
-import { get3Themes } from '../../utils';
 
 export default function ThemeSelect() {
-	const { setImage, setGameState, setFakeImage, amIChooser, players } = useContext(DataContext);
+	const { setImage, setGameState, setFakeImage, amIChooser, players, get3Themes, get4Images } = useContext(DataContext);
 	const [themes, setThemes] = useState<string[]>(get3Themes());
 
 	useEffect(() => {
@@ -26,7 +25,7 @@ export default function ThemeSelect() {
 						variant='outlined'
 						aria-label='outlined button group'
 					>
-						{themes && themes.map((theme) => <Button key={theme} onClick={() => Handler(theme, players, setGameState, setImage, setFakeImage)}>{theme}</Button>)}
+						{themes && themes.map((theme) => <Button key={theme} onClick={() => Handler(theme, players, setGameState, setImage, setFakeImage, get4Images)}>{theme}</Button>)}
 					</ButtonGroup>
 				</>
 			) : (

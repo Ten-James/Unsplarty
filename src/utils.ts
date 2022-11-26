@@ -44,6 +44,5 @@ export const getGameModeDescription = (currentName: string): string => {
 	const gameMode = GAMEMODES.find((gameMode) => gameMode.name === currentName);
 	return gameMode ? gameMode.description : '';
 };
-const themes = ['Civilization', 'Studio', 'Garden', 'Animal', 'Vegetable', 'Mineral', 'Fruit', 'Vehicle', 'Weapon', 'Furniture', 'Clothing', 'Food', 'Flower', 'Tree', 'Bird', 'Fish', 'Buildings', 'Sports'];
+export const themes = ['Civilization', 'Garden', 'Animal', 'Vegetable', 'Mineral', 'Fruit', 'Vehicle', 'Weapon', 'Furniture', 'Clothing', 'Food', 'Dog','Cat', 'House', 'Flower', 'Tree', 'Bird', 'Fish', 'Buildings', 'Sports', "Games", "3D"];
 
-export const get3Themes = () => [...themes].sort(() => Math.random() - 0.5).slice(0, 3);

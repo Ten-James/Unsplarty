@@ -23,6 +23,8 @@ export interface DataContextType {
 	nextPlayer: () => void;
 	theme: boolean;
 	changeTheme: (dark: boolean) => void;
+	get3Themes: () => string[];
+	get4Images: (theme: string) => string[];
 }
 
 export const DataContext = createContext<DataContextType>({
@@ -48,4 +50,6 @@ export const DataContext = createContext<DataContextType>({
 	nextPlayer: () => {},
 	theme: true,
 	changeTheme: () => {},
+	get3Themes: () => [],
+	get4Images: () => [],
 });

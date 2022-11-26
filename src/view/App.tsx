@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy } from 'react';
 import { useDatabase } from '../hooks/useDatabase';
 import { onPlayerVote } from '../handlers';
 import { Box } from '@mui/material';
@@ -9,6 +9,9 @@ import Admin from './admin';
 import GameViews from './GameViews';
 import { write } from '../firebase';
 import { getLocalName } from '../utils';
+const Fetcher = lazy(()=> import( './fetcher'));
+import { useThemes } from '../hooks/useThemes';
+
 
 export interface PlayerType {
 	name: string;
@@ -31,10 +34,13 @@ const App = ({ darkTheme, setDarkTheme }: AppProps) => {
 	const [currentGame, setCurrentGame] = useDatabase('currentGame', '');
 	const [master, setMaster] = useDatabase('master', '');
 
+
 	const [image, setImage] = useDatabase<string>('image', '');
 	const [requiredImages, setRequiredImages] = useDatabase<number>('requiredImages', 0);
 	const [fakeImage, setFakeImage] = useDatabase<string[]>('fakeImage', []);
 	const [myUuid, setMyUuid] = useState<string>('');
+	const [get3Themes, get4Images] = useThemes();
+
 
 	const [userName, setUserName] = useState(getLocalName());
 
@@ -47,6 +53,7 @@ const App = ({ darkTheme, setDarkTheme }: AppProps) => {
 			</div>
 		);
 	}
+
 
 	useEffect(() => {
 		if (image !== '') {
@@ -81,6 +88,8 @@ const App = ({ darkTheme, setDarkTheme }: AppProps) => {
 		nextPlayer: () => setCurrentPlayer((currentPlayer + 1) % playerOrder.length),
 		theme: darkTheme,
 		changeTheme: (dark) => setDarkTheme(dark),
+		get3Themes,
+		get4Images,
 	};
 
 	return (
@@ -93,6 +102,10 @@ const App = ({ darkTheme, setDarkTheme }: AppProps) => {
 					<Route
 						path='/admin'
 						element={<Admin />}
+					/>
+					<Route
+						path='/fetcher'
+						element={<Fetcher />}
 					/>
 					<Route
 						path='/'
