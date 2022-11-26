@@ -8,7 +8,6 @@ body {
   width: 100vw;
   display: grid;
   grid-template-rows: auto 1fr;
-  
 }
 
 .load {
@@ -19,7 +18,7 @@ body {
   left: 50%;
 }
 
-.load5{
+.load5 {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -28,7 +27,6 @@ body {
   transform: translate(-50%, 25vh);
   opacity: 0.3;
 }
-
 
 .load1 {
   transform: translate(-4.5em, -4.5em) scaleY(1);
@@ -44,7 +42,6 @@ body {
   transform: translate(-4.5em, 0.5em) scaleX(1);
   transform-origin: 3em center;
   animation: load3Anim 2s -1000ms infinite ease-in-out;
-
 }
 .load4 {
   transform-origin: center 1em;
@@ -52,8 +49,15 @@ body {
   animation: load4Anim 2s -500ms infinite ease-in-out;
 }
 @keyframes blink {
-  0%, 49.9%, 100%   { opacity: 0; }
-  50%, 99.9% { opacity: 1; }
+  0%,
+  49.9%,
+  100% {
+    opacity: 0;
+  }
+  50%,
+  99.9% {
+    opacity: 1;
+  }
 }
 @keyframes load2Anim {
   0% {

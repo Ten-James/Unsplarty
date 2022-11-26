@@ -9,26 +9,26 @@ const ThemeSelect = lazy(() => import('./themeSelect'));
 const Result = lazy(() => import('./result'));
 
 interface GameViewsProps {
-	areImagesLoaded: boolean;
+  areImagesLoaded: boolean;
 }
 
 const GameViews = ({ areImagesLoaded }: GameViewsProps) => {
-	const { gameState, playerOrder } = useContext(DataContext);
-	return (
-		<>
-			{gameState === '' && <Loading />}
-			<Suspense fallback={<Loading />}>
-				{gameState === 'lobby' && <Lobby />}
-				{gameState === 'gameSelect' && <GameSelect />}
-				{gameState === 'choosing' && !playerOrder && <Loading />}
-				{gameState === 'choosing' && playerOrder && <ThemeSelect />}
-				{gameState === 'playing' && !areImagesLoaded && <Loading />}
-				{gameState === 'playing' && areImagesLoaded && <Games />}
-				{gameState === 'reveal' && <Reveal />}
-				{gameState === 'results' && <Result />}
-			</Suspense>
-		</>
-	);
+  const { gameState, playerOrder } = useContext(DataContext);
+  return (
+    <>
+      {gameState === '' && <Loading />}
+      <Suspense fallback={<Loading />}>
+        {gameState === 'lobby' && <Lobby />}
+        {gameState === 'gameSelect' && <GameSelect />}
+        {gameState === 'choosing' && !playerOrder && <Loading />}
+        {gameState === 'choosing' && playerOrder && <ThemeSelect />}
+        {gameState === 'playing' && !areImagesLoaded && <Loading />}
+        {gameState === 'playing' && areImagesLoaded && <Games />}
+        {gameState === 'reveal' && <Reveal />}
+        {gameState === 'results' && <Result />}
+      </Suspense>
+    </>
+  );
 };
 
 export default GameViews;

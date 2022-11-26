@@ -6,31 +6,33 @@ import { HeaderText } from '../../components/Typography';
 import { Handler } from '../../handlers';
 
 export default function ThemeSelect() {
-	const { setImage, setGameState, setFakeImage, amIChooser, players, get3Themes, get4Images } = useContext(DataContext);
-	const [themes, setThemes] = useState<string[]>(get3Themes());
+  const { setImage, setGameState, setFakeImage, amIChooser, players, get3Themes, get4Images } = useContext(DataContext);
+  const [themes, setThemes] = useState<string[]>(get3Themes());
 
-	useEffect(() => {
-		if (amIChooser) {
-			setImage('');
-			setFakeImage([]);
-		}
-	}, []);
+  useEffect(() => {
+    if (amIChooser) {
+      setImage('');
+      setFakeImage([]);
+    }
+  }, []);
 
-	return (
-		<Base title='Theme Select'>
-			{amIChooser ? (
-				<>
-					<HeaderText text='Select your theme' />
-					<ButtonGroup
-						variant='outlined'
-						aria-label='outlined button group'
-					>
-						{themes && themes.map((theme) => <Button key={theme} onClick={() => Handler(theme, players, setGameState, setImage, setFakeImage, get4Images)}>{theme}</Button>)}
-					</ButtonGroup>
-				</>
-			) : (
-				<HeaderText text='Please wait till chooser choose' />
-			)}
-		</Base>
-	);
+  return (
+    <Base title="Theme Select">
+      {amIChooser ? (
+        <>
+          <HeaderText text="Select your theme" />
+          <ButtonGroup variant="outlined" aria-label="outlined button group">
+            {themes &&
+              themes.map(theme => (
+                <Button key={theme} onClick={() => Handler(theme, players, setGameState, setImage, setFakeImage, get4Images)}>
+                  {theme}
+                </Button>
+              ))}
+          </ButtonGroup>
+        </>
+      ) : (
+        <HeaderText text="Please wait till chooser choose" />
+      )}
+    </Base>
+  );
 }
