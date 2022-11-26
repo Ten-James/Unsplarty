@@ -24,7 +24,7 @@ export interface DataContextType {
   theme: boolean;
   changeTheme: (dark: boolean) => void;
   get3Themes: () => string[];
-  get4Images: (theme: string) => string[];
+  get4Images: (theme: string) => Promise<string[]>;
 }
 
 export const DataContext = createContext<DataContextType>({
@@ -51,5 +51,5 @@ export const DataContext = createContext<DataContextType>({
   theme: true,
   changeTheme: () => {},
   get3Themes: () => [],
-  get4Images: () => [],
+  get4Images: async () => [],
 });

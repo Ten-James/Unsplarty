@@ -1,15 +1,11 @@
 import { useState, useEffect, lazy } from 'react';
 import { useDatabase } from '../hooks/useDatabase';
 import { onPlayerVote } from '../handlers';
-import { Box } from '@mui/material';
 
 import { DataContext, DataContextType } from '../ContextData';
-import { Route, Routes } from 'react-router-dom';
-import Admin from './admin';
 import GameViews from './GameViews';
 import { write } from '../firebase';
 import { getLocalName } from '../utils';
-const Fetcher = lazy(() => import('./fetcher'));
 import { useThemes } from '../hooks/useThemes';
 
 export interface PlayerType {
@@ -90,13 +86,7 @@ const App = ({ darkTheme, setDarkTheme }: AppProps) => {
 
   return (
     <DataContext.Provider value={ContextData}>
-      <Box bgcolor={theme => theme.palette.background.default} className="App">
-        <Routes>
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/fetcher" element={<Fetcher />} />
-          <Route path="/" element={<GameViews areImagesLoaded={players && Object.values(players).every(p => p.name !== undefined && p.loaded)} />} />
-        </Routes>
-      </Box>
+      <GameViews areImagesLoaded={players && Object.values(players).every(p => p.name !== undefined && p.loaded)} />
     </DataContext.Provider>
   );
 };

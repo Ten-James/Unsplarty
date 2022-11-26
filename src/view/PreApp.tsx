@@ -1,9 +1,13 @@
 import { Suspense, useState, lazy } from 'react';
-import { ThemeProvider } from '@mui/material';
+import { Route, Routes } from 'react-router-dom';
+import { ThemeProvider, Box } from '@mui/material';
 import { darkThemeOption, lightThemeOption } from '../theme';
-import Loading from './loading';
 import { getLocalTheme, setLocalTheme } from '../utils';
+import Loading from './loading';
+
+const Admin = lazy(() => import('./admin'));
 const App = lazy(() => import('./App'));
+const Fetcher = lazy(() => import('./fetcher'));
 
 const PreApp = () => {
   const [darkTheme, setDarkTheme] = useState(getLocalTheme);
@@ -16,7 +20,13 @@ const PreApp = () => {
   return (
     <ThemeProvider theme={darkTheme ? darkThemeOption : lightThemeOption}>
       <Suspense fallback={<Loading />}>
-        <App darkTheme={darkTheme} setDarkTheme={setTheme} />
+        <Box bgcolor={theme => theme.palette.background.default} className="App">
+          <Routes>
+            <Route path="/admin" element={<Admin />} />
+            <Route path="/fetcher" element={<Fetcher />} />
+            <Route path="/" element={<App darkTheme={darkTheme} setDarkTheme={setTheme} />} />
+          </Routes>
+        </Box>
       </Suspense>
     </ThemeProvider>
   );

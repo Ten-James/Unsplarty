@@ -6,5 +6,7 @@
   "tabWidth": 2,
   "useTabs": false,
   "arrowParens": "avoid",
-  "singleAttributePerLine": false
+  "singleAttributePerLine": false,
+  "bracketSpacing": true,
+  "jsxBracketSameLine": false
 }

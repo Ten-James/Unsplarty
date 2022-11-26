@@ -12,9 +12,9 @@ export const formSubmit = (event: FormEvent<HTMLFormElement>, players: { [key: s
   if (!players) {
     const newUuid = CreateUUID();
     setMyUuid(newUuid);
-    setLocalName(newUuid);
+    setLocalName(newName);
     const newPlayer: PlayerType = {
-      name: newUuid,
+      name: newName,
       lastOpinion: -1,
       score: 0,
       streak: 0,
@@ -30,9 +30,9 @@ export const formSubmit = (event: FormEvent<HTMLFormElement>, players: { [key: s
   }
   const newUuid = CreateUUID();
   setMyUuid(newUuid);
-  setLocalName(newUuid);
+  setLocalName(newName);
   const newPlayer: PlayerType = {
-    name: newUuid,
+    name: newName,
     lastOpinion: -1,
     score: 0,
     streak: 0,
@@ -63,10 +63,10 @@ export const onPlayerVote = (uuid: string, player: PlayerType | undefined, vote:
   } else write(`players/${uuid}/streaks`, 0);
 };
 
-export const Handler = async (theme: string, players: { [key: string]: PlayerType }, setGameState: (state: string) => void, setImage: (url: string) => void, setFakeImage: (urls: string[]) => void, get4Images: (theme: string) => string[]) => {
+export const Handler = async (theme: string, players: { [key: string]: PlayerType }, setGameState: (state: string) => void, setImage: (url: string) => void, setFakeImage: (urls: string[]) => void, get4Images: (theme: string) => Promise<string[]>) => {
   setGameState('playing');
   write('theme', theme);
-  const imageUrls = get4Images(theme);
+  const imageUrls = await get4Images(theme);
   const datas = await Promise.all(imageUrls.map(url => getBase64FromUrl(url)));
   setImage(datas[0]);
   setFakeImage([datas[1], datas[2], datas[3]]);
@@ -77,8 +77,16 @@ const unsplash = createApi({
   accessKey: import.meta.env.VITE_UNSPLASH_ACCESS_KEY,
 });
 
-export const writeAllTemplatesToFirebase = async () => {
-  const templates = [...themes].sort(() => Math.random() - 0.5).slice(0, 50); // api limit;
+export const writeAllTemplatesToFirebase = async (onlyNew: boolean, setLastTime: (a: string) => void) => {
+  let templates = [...themes].sort(() => Math.random() - 0.5).slice(0, 50); // api limit;
+  if (onlyNew) {
+    const data = await storeRead(storeGetDocument('default', 'themes'));
+    if (data.exists())
+      templates = [...themes]
+        .filter(theme => !(data.data()?.themes as string[]).includes(theme))
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 50);
+  }
   await templates.forEach(async theme => {
     const result = await unsplash.photos.getRandom({ query: theme, count: 30 });
     if (result.errors) {
@@ -95,6 +103,8 @@ export const writeAllTemplatesToFirebase = async () => {
     }
     await storeWrite(docRef, data);
   });
+
+  setLastTime(new Date().toLocaleString());
 };
 
 interface themeType {
@@ -108,10 +118,7 @@ export const writeAllThemesToFirebase = async () => {
     querySnapshot.forEach(doc => {
       themes.push(doc.data() as themeType);
     });
-    await storeWrite(
-      storeGetDocument('default', 'themes'),
-      themes.map(theme => theme.name),
-    );
+    await storeWrite(storeGetDocument('default', 'themes'), { themes: themes.map(theme => theme.name) });
   });
 };
 export const newRound = (players: { [key: string]: PlayerType }, nextPlayer: () => void, setGameState: (str: string) => void) => {

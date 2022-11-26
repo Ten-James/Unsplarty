@@ -1,20 +1,12 @@
 import { getDocs } from 'firebase/firestore';
 import { useState, useEffect } from 'react';
-import { storeGetCollection } from '../firebase';
-interface themeType {
-  name: string;
-  images: string[];
-}
+import { storeGetCollection, storeGetDocument, storeRead } from '../firebase';
 export const useThemes = () => {
-  const [themes, setThemes] = useState<themeType[]>([]);
+  const [themes, setThemes] = useState<string[]>([]);
 
   useEffect(() => {
-    getDocs(storeGetCollection('themes')).then(querySnapshot => {
-      const themes: themeType[] = [];
-      querySnapshot.forEach(doc => {
-        themes.push(doc.data() as themeType);
-      });
-      setThemes(old => [...old, ...themes]);
+    storeRead(storeGetDocument('default', 'themes')).then(data => {
+      if (data.exists()) setThemes(data.data() as string[]);
     });
   }, []);
 
@@ -22,16 +14,9 @@ export const useThemes = () => {
     console.log(themes);
   }, [themes]);
 
-  const get3Themes = (): string[] =>
-    themes
-      .sort(() => Math.random() - 0.5)
-      .slice(0, 3)
-      .map(theme => theme.name);
-  const get4Images = (theme: string): string[] =>
-    themes
-      .find(t => t.name === theme)
-      ?.images.sort(() => Math.random() - 0.5)
-      .slice(0, 4) || [];
+  const get3Themes = (): string[] => themes.sort(() => Math.random() - 0.5).slice(0, 3);
+
+  const get4Images = async (theme: string): Promise<string[]> => await storeRead(storeGetDocument('themes', theme)).then(data => (data.exists() ? [...(data.data()?.images as string[])].sort(() => Math.random() - 0.5).slice(0, 4) : []));
 
   return [get3Themes, get4Images] as const;
 };
