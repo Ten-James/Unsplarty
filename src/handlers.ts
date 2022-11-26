@@ -10,7 +10,7 @@ export const formSubmit = (event: FormEvent<HTMLFormElement>, players: { [key: s
 		const newUuid = CreateUUID();
 		setMyUuid(newUuid);
 		setLocalName(newName);
-		const newPlayer: PlayerType = { name: newName, lastOption: -1, score: 0, streak: 0, loaded: false };
+		const newPlayer: PlayerType = { name: newName, lastOpinion: -1, score: 0, streak: 0, loaded: false };
 		write(`players/${newUuid}`, newPlayer);
 		write('master', newUuid);
 		return;
@@ -22,7 +22,7 @@ export const formSubmit = (event: FormEvent<HTMLFormElement>, players: { [key: s
 	const newUuid = CreateUUID();
 	setMyUuid(newUuid);
 	setLocalName(newName);
-	const newPlayer: PlayerType = { name: newName, lastOption: -1, score: 0, streak: 0, loaded: false };
+	const newPlayer: PlayerType = { name: newName, lastOpinion: -1, score: 0, streak: 0, loaded: false };
 	write(`players/${newUuid}`, newPlayer);
 };
 

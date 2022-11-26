@@ -7,6 +7,7 @@ export interface DataContextType {
 	userName: string;
 	setUserName: (name: string) => void;
 	playerOrder: string[];
+	currentPlayerUUID: string;
 	gameState: string;
 	setGameState: (state: string) => void;
 	currentGame: string;
@@ -27,10 +28,11 @@ export interface DataContextType {
 export const DataContext = createContext<DataContextType>({
 	myUuid: '',
 	setMyUuid: () => {},
-	me: { name: '', lastOption: -1, score: 0, streak: 0, loaded: false },
+	me: { name: '', lastOpinion: -1, score: 0, streak: 0, loaded: false },
 	userName: '',
 	setUserName: () => {},
 	playerOrder: [],
+	currentPlayerUUID: '',
 	gameState: '',
 	setGameState: () => {},
 	currentGame: '',

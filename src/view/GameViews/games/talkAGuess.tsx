@@ -22,8 +22,12 @@ export default function TalkAGuess() {
 		}, 2000);
 		return () => clearInterval(interval);
 	}, []);
+	useEffect(() => {
+		if (amIChooser)
+			if (timer <= 0 || Object.values(players).every((player) => player.lastOpinion !== -1)) 
+				setGameState('reveal');
+	}, [timer, players, setGameState]);
 	if (amIChooser) {
-		if (timer <= 0 || Object.values(players).every((player) => player.lastOption !== -1)) setGameState('results');
 
 		if (Phase === 0)
 			return (

@@ -3,6 +3,7 @@ import { DataContext } from '../../ContextData';
 import Loading from '../loading';
 import Games from './games';
 import Lobby from './lobby';
+const Reveal = lazy(() => import('./reveal'));
 const GameSelect = lazy(() => import('./gameSelect'));
 const ThemeSelect = lazy(() => import('./themeSelect'));
 const Result = lazy(() => import('./result'));
@@ -23,6 +24,7 @@ const GameViews = ({ areImagesLoaded }: GameViewsProps) => {
 				{gameState === 'choosing' && playerOrder && <ThemeSelect />}
 				{gameState === 'playing' && !areImagesLoaded && <Loading />}
 				{gameState === 'playing' && areImagesLoaded && <Games />}
+				{gameState === 'reveal' && <Reveal />}
 				{gameState === 'results' && <Result />}
 			</Suspense>
 		</>

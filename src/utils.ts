@@ -46,13 +46,4 @@ export const getGameModeDescription = (currentName: string): string => {
 };
 const themes = ['Civilization', 'Studio', 'Garden', 'Animal', 'Vegetable', 'Mineral', 'Fruit', 'Vehicle', 'Weapon', 'Furniture', 'Clothing', 'Food', 'Flower', 'Tree', 'Bird', 'Fish', 'Buildings', 'Sports'];
 
-export const get3Themes = () => {
-	// find api for that
-	const theme1 = themes[Math.floor(Math.random() * themes.length)];
-	let theme2 = themes[Math.floor(Math.random() * themes.length)];
-	while (theme2 === theme1) theme2 = themes[Math.floor(Math.random() * themes.length)];
-	let theme3 = themes[Math.floor(Math.random() * themes.length)];
-	while (theme3 === theme1 || theme3 === theme2) theme3 = themes[Math.floor(Math.random() * themes.length)];
-
-	return [theme1, theme2, theme3];
-};
+export const get3Themes = () => [...themes].sort(() => Math.random() - 0.5).slice(0, 3);

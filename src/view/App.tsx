@@ -12,7 +12,7 @@ import { getLocalName } from '../utils';
 
 export interface PlayerType {
 	name: string;
-	lastOption: number;
+	lastOpinion: number;
 	score: number;
 	streak: number;
 	loaded: boolean;
@@ -28,7 +28,7 @@ const App = ({ darkTheme, setDarkTheme }: AppProps) => {
 
 	const [gameState, setGameState] = useDatabase<string>('gameState', '');
 	const [players, setPlayers] = useDatabase<{ [key: string]: PlayerType }>('players', {});
-	const [currentGame, setCurrentGame] = useDatabase('talking', '');
+	const [currentGame, setCurrentGame] = useDatabase('currentGame', '');
 	const [master, setMaster] = useDatabase('master', '');
 
 	const [image, setImage] = useDatabase<string>('image', '');
@@ -62,6 +62,7 @@ const App = ({ darkTheme, setDarkTheme }: AppProps) => {
 		setMyUuid,
 		userName,
 		setUserName,
+		currentPlayerUUID: playerOrder? playerOrder[currentPlayer]: '',
 		playerOrder,
 		gameState,
 		setGameState,

@@ -21,9 +21,12 @@ export default function TalkAGuessReversed() {
 		}, 2000);
 		return () => clearInterval(interval);
 	}, []);
-	if (amIChooser) {
-		if (timer <= 0 || me?.lastOption !== -1) setGameState('results');
-	}
+	
+	useEffect(() => {
+		if (amIChooser)
+			if (timer <= 0 || me?.lastOpinion !== -1) 
+				setGameState('reveal');
+	}, [timer, players, setGameState]);
 	if (!amIChooser) {
 		if (Phase === 0)
 			return (

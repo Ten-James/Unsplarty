@@ -26,7 +26,7 @@ export default function ThemeSelect() {
 						variant='outlined'
 						aria-label='outlined button group'
 					>
-						{themes && themes.map((theme) => <Button onClick={() => Handler(theme, players, setGameState, setImage, setFakeImage)}>{theme}</Button>)}
+						{themes && themes.map((theme) => <Button key={theme} onClick={() => Handler(theme, players, setGameState, setImage, setFakeImage)}>{theme}</Button>)}
 					</ButtonGroup>
 				</>
 			) : (
