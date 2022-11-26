@@ -19,6 +19,7 @@ const Result = () => {
     <Base title="Results">
       {Object.values(players)
         .sort((a, b) => b.score - a.score)
+        .filter((player) => player.name !== undefined)
         .map((player) => (
           <React.Fragment key={player.name}>
             <PlainText

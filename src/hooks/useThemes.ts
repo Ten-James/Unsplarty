@@ -18,6 +18,10 @@ export const useThemes = () => {
     });
     }, []);
 
+    useEffect(() => {
+        console.log(themes);
+    }, [themes]);
+
     const get3Themes = (): string[] => themes.sort(() => Math.random() - 0.5).slice(0, 3).map(theme => theme.name);
     const get4Images = (theme: string): string[] => themes.find(t => t.name === theme)?.images.sort(() => Math.random() - 0.5).slice(0, 4) || [];
 
