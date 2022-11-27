@@ -69,10 +69,10 @@ const Fetcher = ({ user }: FetcherProps) => {
             <Stack spacing={2}>
               <HeaderText text={`Last time fetched: ${new Date(lastTime).toLocaleString().split(':')[0]}h`} />
               {howManyICanFetch(lastTime, lastCount) ? <HeaderText text={`You can fetch now ${howManyICanFetch(lastTime, lastCount)}`} /> : null}
-              <Button variant="contained" onClick={() => writeAllTemplatesToFirebase(true, setStatus, lastTime, setLastTime, lastCount, setLastCount)}>
+              <Button variant="contained" disabled={howManyICanFetch(lastTime, lastCount)===0} onClick={() => writeAllTemplatesToFirebase(true, setStatus, lastTime, setLastTime, lastCount, setLastCount)}>
                 Fetch new
               </Button>
-              <Button variant="contained" onClick={() => writeAllTemplatesToFirebase(false, setStatus, lastTime, setLastTime, lastCount, setLastCount)}>
+              <Button variant="contained" disabled={howManyICanFetch(lastTime, lastCount)===0} onClick={() => writeAllTemplatesToFirebase(false, setStatus, lastTime, setLastTime, lastCount, setLastCount)}>
                 Fetch
               </Button>
               <HeaderText sx={{ TextAlign: 'left' }} text={`${status.count}/${status.total}: ${status.status}`} />

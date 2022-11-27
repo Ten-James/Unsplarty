@@ -43,7 +43,7 @@ export const writeAllTemplatesToFirebase = async (onlyNew: boolean, setStatus: R
   });
 
   setLastTime(new Date().toString());
-  setLastCount(templates.length);
+  setLastCount(lastCount+ templates.length);
 };
 
 export const writeAllThemesToFirebase = async (setter: React.Dispatch<React.SetStateAction<ThemesDocumentType>>) => {
