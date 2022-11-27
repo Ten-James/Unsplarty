@@ -1,4 +1,4 @@
-import { write } from '../firebase';
+import { write } from '../firebase/realtime';
 import { useEffect } from 'react';
 import Loading from './loading';
 

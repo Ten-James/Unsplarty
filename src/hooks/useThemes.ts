@@ -1,6 +1,6 @@
 import { getDocs } from 'firebase/firestore';
 import { useState, useEffect } from 'react';
-import { storeGetCollection, storeGetDocument, storeRead } from '../firebase';
+import { storeGetCollection, storeGetDocument, storeRead } from '../firebase/firestore';
 export const useThemes = () => {
   const [themes, setThemes] = useState<string[]>([]);
 

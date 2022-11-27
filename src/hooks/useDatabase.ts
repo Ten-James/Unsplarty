@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { subscribe, write } from '../firebase';
+import { subscribe, write } from '../firebase/realtime';
 
 export function useDatabase<T>(name: string, defaultValue: T) {
   const [data, setData] = useState<T>(defaultValue);

@@ -1,10 +1,7 @@
 import { FormEvent } from 'react';
-import { storeGetCollection, storeGetDocument, storeRead, storeWrite, write } from './firebase';
-import { CreateUUID, getBase64FromUrl, setLocalName, sleep, themes } from './utils';
-import { PlayerType } from './view/App';
-import { createApi } from 'unsplash-js';
-import { Random } from 'unsplash-js/dist/methods/photos/types';
-import { getDocs } from 'firebase/firestore';
+import { write } from '../firebase/realtime';
+import { CreateUUID, getBase64FromUrl, setLocalName } from '../utils';
+import { PlayerType } from '../view/App';
 
 export const formSubmit = (event: FormEvent<HTMLFormElement>, players: { [key: string]: PlayerType }, newName: string, setMyUuid: (newUuid: string) => void) => {
   event.preventDefault();
@@ -72,55 +69,8 @@ export const Handler = async (theme: string, players: { [key: string]: PlayerTyp
   setFakeImage([datas[1], datas[2], datas[3]]);
   write('requiredImages', 4);
 };
-const unsplash = createApi({
-  //@ts-ignore
-  accessKey: import.meta.env.VITE_UNSPLASH_ACCESS_KEY,
-});
 
-export const writeAllTemplatesToFirebase = async (onlyNew: boolean, setLastTime: (a: string) => void) => {
-  let templates = [...themes].sort(() => Math.random() - 0.5).slice(0, 50); // api limit;
-  if (onlyNew) {
-    const data = await storeRead(storeGetDocument('default', 'themes'));
-    if (data.exists())
-      templates = [...themes]
-        .filter(theme => !(data.data()?.themes as string[]).includes(theme))
-        .sort(() => Math.random() - 0.5)
-        .slice(0, 50);
-  }
-  await templates.forEach(async theme => {
-    const result = await unsplash.photos.getRandom({ query: theme, count: 30 });
-    if (result.errors) {
-      console.error(result.errors[0]);
-      return;
-    }
-    const images = (result.response as Random[]).map((photo: any) => photo.urls.regular);
-    console.log(theme, images);
-    const docRef = storeGetDocument('themes', theme);
-    const doc = await storeRead(docRef);
-    let data = { name: theme, images: images };
-    if (doc.exists()) {
-      data = { name: theme, images: [...doc.data()?.images, ...images] };
-    }
-    await storeWrite(docRef, data);
-  });
 
-  setLastTime(new Date().toLocaleString());
-};
-
-interface themeType {
-  name: string;
-  images: string[];
-}
-export const writeAllThemesToFirebase = async () => {
-  const themes = await storeGetCollection('themes');
-  getDocs(themes).then(async querySnapshot => {
-    const themes: themeType[] = [];
-    querySnapshot.forEach(doc => {
-      themes.push(doc.data() as themeType);
-    });
-    await storeWrite(storeGetDocument('default', 'themes'), { themes: themes.map(theme => theme.name) });
-  });
-};
 export const newRound = (players: { [key: string]: PlayerType }, nextPlayer: () => void, setGameState: (str: string) => void) => {
   nextPlayer();
   setGameState('choosing');

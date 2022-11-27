@@ -4,7 +4,7 @@ import { onPlayerVote } from '../handlers';
 
 import { DataContext, DataContextType } from '../ContextData';
 import GameViews from './GameViews';
-import { write } from '../firebase';
+import { write } from '../firebase/realtime';
 import { getLocalName } from '../utils';
 import { useThemes } from '../hooks/useThemes';
 
