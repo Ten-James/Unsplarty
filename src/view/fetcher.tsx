@@ -18,13 +18,13 @@ const Fetcher = () => {
     <Base title="Fetcher">
       <Stack spacing={2}>
         <HeaderText text={`Last time fetched: ${lastTime}`} />
-        <Button variant="contained" onClick={() => writeAllTemplatesToFirebase(true,setStatus,  setLastTime)}>
+        <Button variant="contained" onClick={() => writeAllTemplatesToFirebase(true, setStatus, setLastTime)}>
           Fetch new
         </Button>
-        <Button variant="contained" onClick={() => writeAllTemplatesToFirebase(false,setStatus, setLastTime)}>
+        <Button variant="contained" onClick={() => writeAllTemplatesToFirebase(false, setStatus, setLastTime)}>
           Fetch
         </Button>
-        <HeaderText text={`${status.count}/${status.total}: ${status.status}`} />
+        <HeaderText sx={{ TextAlign: 'left' }} text={`${status.count}/${status.total}: ${status.status}`} />
         <Button variant="contained" onClick={() => writeAllThemesToFirebase()}>
           Write to Firebase
         </Button>

@@ -6,7 +6,6 @@ const db = getDatabase(firebaseApp);
 
 export const write = (path: string, data: any) => {
   set(ref(db, path), data);
-  console.log(JSON.stringify(data));
 };
 
 export const read = (path: string, setter: (a: any) => void) => {
@@ -27,6 +26,5 @@ export const subscribe = (path: string, setter: (a: any) => void) => {
   onValue(ref(db, path), snapshot => {
     const data = snapshot.val();
     setter(data);
-    if (path === 'players') console.log(path, snapshot.val() as { [key: string]: PlayerType });
   });
 };

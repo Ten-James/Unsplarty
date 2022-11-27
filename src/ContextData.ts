@@ -25,12 +25,15 @@ export interface DataContextType {
   changeTheme: (dark: boolean) => void;
   get3Themes: () => string[];
   get4Images: (theme: string) => Promise<string[]>;
+  timer: number;
+  currentTheme: string;
+  setDoesTimerStarted: (start: boolean) => void;
 }
 
 export const DataContext = createContext<DataContextType>({
   myUuid: '',
   setMyUuid: () => {},
-  me: { name: '', lastOpinion: -1, score: 0, streak: 0, loaded: false },
+  me: { name: '', lastOpinion: -1, score: 0, streak: 0, loaded: false, addedScore: 0 },
   userName: '',
   setUserName: () => {},
   playerOrder: [],
@@ -52,4 +55,7 @@ export const DataContext = createContext<DataContextType>({
   changeTheme: () => {},
   get3Themes: () => [],
   get4Images: async () => [],
+  timer: 0,
+  currentTheme: '',
+  setDoesTimerStarted: () => {},
 });

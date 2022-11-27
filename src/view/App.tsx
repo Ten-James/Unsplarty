@@ -7,11 +7,14 @@ import GameViews from './GameViews';
 import { write } from '../firebase/realtime';
 import { getLocalName } from '../utils';
 import { useThemes } from '../hooks/useThemes';
+import Base from '../components/base';
+import { HeaderText, PlainText } from '../components/Typography';
 
 export interface PlayerType {
   name: string;
   lastOpinion: number;
   score: number;
+  addedScore: number;
   streak: number;
   loaded: boolean;
 }
@@ -27,25 +30,22 @@ const App = ({ darkTheme, setDarkTheme }: AppProps) => {
   const [gameState, setGameState] = useDatabase<string>('gameState', '');
   const [players, setPlayers] = useDatabase<{ [key: string]: PlayerType }>('players', {});
   const [currentGame, setCurrentGame] = useDatabase('currentGame', '');
+  const [currentTheme, setCurrentTheme] = useDatabase('theme', '');
   const [master, setMaster] = useDatabase('master', '');
 
   const [image, setImage] = useDatabase<string>('image', '');
   const [requiredImages, setRequiredImages] = useDatabase<number>('requiredImages', 0);
   const [fakeImage, setFakeImage] = useDatabase<string[]>('fakeImage', []);
+  const [whenRoundStart, setWhenRoundStart] = useDatabase<number>('whenRoundStart', 0);
+  const [doesTimerStarted, setDoesTimerStarted] = useDatabase('doesTimerStarted', false);
+
+  const [timer, setTimer] = useState(0);
   const [myUuid, setMyUuid] = useState<string>('');
   const [get3Themes, get4Images] = useThemes();
 
   const [userName, setUserName] = useState(getLocalName());
 
   const amIMaster = master === myUuid;
-
-  if (myUuid === '' && !['lobby', ''].includes(gameState)) {
-    return (
-      <div className="App">
-        <h1>You are late ask them to reset game</h1>
-      </div>
-    );
-  }
 
   useEffect(() => {
     if (image !== '') {
@@ -54,6 +54,23 @@ const App = ({ darkTheme, setDarkTheme }: AppProps) => {
       }
     }
   }, [image, fakeImage, requiredImages]);
+
+  useEffect(() => {
+    if (amIMaster) if (players !== null && !doesTimerStarted) if (Object.values(players).every(p => p.name !== undefined && p.loaded)) if (whenRoundStart < new Date().getTime()) setWhenRoundStart(new Date().getTime() + 5000);
+  }, [players]);
+
+  useEffect(() => {
+    if (whenRoundStart > 0) {
+      if (whenRoundStart > new Date().getTime()) {
+        setDoesTimerStarted(true);
+        setTimer(Math.floor((whenRoundStart - new Date().getTime()) / 10));
+        const intervar = setInterval(() => {
+          setTimer(old => old - 1);
+        }, 10);
+        return () => clearInterval(intervar);
+      }
+    }
+  }, [whenRoundStart]);
 
   const ContextData: DataContextType = {
     myUuid,
@@ -75,15 +92,25 @@ const App = ({ darkTheme, setDarkTheme }: AppProps) => {
     amIMaster,
     amIChooser: playerOrder !== null && playerOrder[currentPlayer] === myUuid,
     onVote: (vote, timer) => {
-      onPlayerVote(myUuid, players[myUuid], vote, timer);
+      onPlayerVote(myUuid, players[myUuid], vote, timer, whenRoundStart);
     },
     nextPlayer: () => setCurrentPlayer((currentPlayer + 1) % playerOrder.length),
     theme: darkTheme,
     changeTheme: dark => setDarkTheme(dark),
     get3Themes,
     get4Images,
+    timer,
+    currentTheme,
+    setDoesTimerStarted,
   };
-
+  if (myUuid === '' && !['lobby', ''].includes(gameState)) {
+    return (
+      <Base title="fuck">
+        <HeaderText text="They are already playing" />
+        <PlainText text="Ask them to start new game" />
+      </Base>
+    );
+  }
   return (
     <DataContext.Provider value={ContextData}>
       <GameViews areImagesLoaded={players && Object.values(players).every(p => p.name !== undefined && p.loaded)} />

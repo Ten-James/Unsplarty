@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect } from 'react';
 import { DataContext } from '../../ContextData';
-import { Button, ButtonGroup } from '@mui/material';
+import { Button, ButtonGroup, Stack } from '@mui/material';
 import Base from '../../components/base';
 import { HeaderText } from '../../components/Typography';
 import { Handler } from '../../handlers';
@@ -20,15 +20,17 @@ export default function ThemeSelect() {
     <Base title="Theme Select">
       {amIChooser ? (
         <>
-          <HeaderText text="Select your theme" />
-          <ButtonGroup variant="outlined" aria-label="outlined button group">
-            {themes &&
-              themes.map(theme => (
-                <Button key={theme} onClick={() => Handler(theme, players, setGameState, setImage, setFakeImage, get4Images)}>
-                  {theme}
-                </Button>
-              ))}
-          </ButtonGroup>
+          <HeaderText margin="0" text="Select your theme" />
+          <Stack sx={{ mt: '1rem' }} direction="row" alignItems="center" justifyContent="center">
+            <ButtonGroup variant="contained" aria-label="outlined button group">
+              {themes &&
+                themes.map(theme => (
+                  <Button key={theme} onClick={() => Handler(theme, players, setGameState, setImage, setFakeImage, get4Images)}>
+                    {theme}
+                  </Button>
+                ))}
+            </ButtonGroup>
+          </Stack>
         </>
       ) : (
         <HeaderText text="Please wait till chooser choose" />

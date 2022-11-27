@@ -28,7 +28,7 @@ export default function TalkAGuessReversed() {
   if (!amIChooser) {
     if (Phase === 0)
       return (
-        <Base title="Game">
+        <Base title="Game" noPaper>
           <img
             id="mainPicture"
             src={imageUrls[0]}
@@ -59,7 +59,7 @@ export default function TalkAGuessReversed() {
   }
 
   return (
-    <Base title="Game">
+    <Base title="Game" noPaper={!chosenImage}>
       {chosenImage ? (
         <HeaderText text="You have already chosen." />
       ) : (
@@ -69,7 +69,7 @@ export default function TalkAGuessReversed() {
               key={url}
               onClick={() => {
                 setChosenImage(url);
-                onVote(imageUrls.indexOf(url), timer);
+                onVote(imageUrls.indexOf(url), new Date().getTime());
               }}
             >
               <img src={url} alt="" />

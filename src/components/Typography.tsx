@@ -8,7 +8,7 @@ interface PlainTextProps {
 
 export const HeaderText = ({ text, margin, sx }: PlainTextProps) => {
   return (
-    <Typography variant="h5" component="div" margin={margin || '1rem'} sx={sx || { textAlign: 'center' }}>
+    <Typography variant="h5" component="div" margin={margin || '1rem'} sx={sx || { textAlign: 'center', textTransform: 'uppercase' }}>
       {text}
     </Typography>
   );

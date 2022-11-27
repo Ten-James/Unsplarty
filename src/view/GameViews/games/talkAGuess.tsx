@@ -28,7 +28,7 @@ export default function TalkAGuess() {
   if (amIChooser) {
     if (Phase === 0)
       return (
-        <Base title="Game">
+        <Base title="Game" noPaper>
           <img
             id="mainPicture"
             src={imageUrls[0]}
@@ -59,7 +59,7 @@ export default function TalkAGuess() {
   }
 
   return (
-    <Base title="Game">
+    <Base title="Game" noPaper={!chosenImage}>
       {chosenImage ? (
         <HeaderText text="You have already chosen." />
       ) : (
@@ -69,7 +69,7 @@ export default function TalkAGuess() {
               key={url}
               onClick={() => {
                 setChosenImage(url);
-                onVote(imageUrls.indexOf(url), timer);
+                onVote(imageUrls.indexOf(url), new Date().getTime());
               }}
             >
               <img src={url} alt="" />

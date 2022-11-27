@@ -10,9 +10,6 @@ const Admin = () => {
     write('image', '');
     write('playerOrder', []);
     write('fakeImage', []);
-    write('playerOpinions', []);
-    write('playerScores', []);
-    write('playerStreaks', []);
 
     // redirect to lobby
     setTimeout(() => (window.location.href = '/'), 2000);

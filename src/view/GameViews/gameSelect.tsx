@@ -20,9 +20,9 @@ export default function GameSelect() {
           ))}
         </ButtonGroup>
       </Grid>
-      <PlainText text={getGameModeDescription(currentGame)} />
+      <PlainText sx={{ maxWidth: '50vw' }} text={getGameModeDescription(currentGame)} />
       <Grid container justifyContent="center" alignItems="center" sx={{ padding: '0.3em' }}>
-        <Button variant="outlined" disabled={!amIMaster} onClick={() => StartGame(players)}>
+        <Button fullWidth variant="contained" disabled={!amIMaster} onClick={() => StartGame(players)}>
           Start
         </Button>
       </Grid>

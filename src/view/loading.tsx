@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from 'react';
 import { DataContext } from '../ContextData';
 import { loadingQuotes } from '../utils';
 
-export default function Loading() {
+export default function Loading({ reason }: { reason?: string }) {
   const { me } = useContext(DataContext);
   const [visibleQuote, setVisibleQuote] = useState(loadingQuotes[Math.floor(Math.random() * loadingQuotes.length)]);
   useEffect(() => {
@@ -43,6 +43,11 @@ export default function Loading() {
           <Typography variant="h3" color="primary" className="load5">
             {me && me.loaded ? 'I am Loaded...' : visibleQuote}
           </Typography>
+          {reason && (
+            <Typography variant="h6" color="primary" className="load6">
+              {reason}
+            </Typography>
+          )}
         </Grid>
       </Grid>
     </>

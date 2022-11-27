@@ -6,13 +6,9 @@ export const useThemes = () => {
 
   useEffect(() => {
     storeRead(storeGetDocument('default', 'themes')).then(data => {
-      if (data.exists()) setThemes(data.data() as string[]);
+      if (data.exists()) setThemes(data.data().themes as string[]);
     });
   }, []);
-
-  useEffect(() => {
-    console.log(themes);
-  }, [themes]);
 
   const get3Themes = (): string[] => themes.sort(() => Math.random() - 0.5).slice(0, 3);
 
