@@ -1,23 +1,27 @@
 import { createApi } from 'unsplash-js';
 import { Random } from 'unsplash-js/dist/methods/photos/types';
 import { getDocs } from 'firebase/firestore';
-import { statusType } from '../view/fetcher';
+import { statusType, ThemesDocumentType } from '../view/fetcher';
 import { storeGetCollection, storeGetDocument, storeRead, storeWrite } from '../firebase/firestore';
-import { themes } from '../utils';
 
 const unsplash = createApi({
   //@ts-ignore
   accessKey: import.meta.env.VITE_UNSPLASH_ACCESS_KEY,
 });
-export const writeAllTemplatesToFirebase = async (onlyNew: boolean, setStatus: React.Dispatch<React.SetStateAction<statusType>>, setLastTime: (a: string) => void) => {
-  let templates = [...themes].sort(() => Math.random() - 0.5).slice(0, 50); // api limit;
+
+export const howManyICanFetch = (lastTime: string, lastCount: number): number => (new Date(lastTime).getDate() === new Date().getDate() && new Date(lastTime).getHours() === new Date().getHours() ? 50 - lastCount : 50);
+
+export const writeAllTemplatesToFirebase = async (onlyNew: boolean, setStatus: React.Dispatch<React.SetStateAction<statusType>>, lastTime: string, setLastTime: (a: string) => void, lastCount: number, setLastCount: (a: number) => void) => {
+  const howManyICanFetchNow = howManyICanFetch(lastTime, lastCount);
+
+  const data = await storeRead(storeGetDocument('default', 'themes'));
+  if (!data.exists()) return;
+  let templates = [...data.data()?.themes, ...data.data()?.newThemes].sort(() => Math.random() - 0.5).slice(0, howManyICanFetchNow); // api limit;
   if (onlyNew) {
-    const data = await storeRead(storeGetDocument('default', 'themes'));
-    if (data.exists())
-      templates = [...themes]
-        .filter(theme => !(data.data()?.themes as string[]).includes(theme))
-        .sort(() => Math.random() - 0.5)
-        .slice(0, 50);
+    templates = [...data.data()?.newThemes]
+      .filter(theme => !(data.data()?.themes as string[]).includes(theme))
+      .sort(() => Math.random() - 0.5)
+      .slice(0, howManyICanFetchNow);
   }
   setStatus({ count: 0, total: templates.length, status: 'fetching' });
   await templates.forEach(async theme => {
@@ -38,20 +42,21 @@ export const writeAllTemplatesToFirebase = async (onlyNew: boolean, setStatus: R
     setStatus(old => ({ count: old.count + 1, total: templates.length, status: `fetching ${theme}` }));
   });
 
-  setLastTime(new Date().toLocaleString());
+  setLastTime(new Date().toString());
+  setLastCount(templates.length);
 };
 
-interface themeType {
-  name: string;
-  images: string[];
-}
-export const writeAllThemesToFirebase = async () => {
+export const writeAllThemesToFirebase = async (setter: React.Dispatch<React.SetStateAction<ThemesDocumentType>>) => {
   const themes = await storeGetCollection('themes');
+  const defaultThemes = await storeRead(storeGetDocument('default', 'themes'));
+  if (!defaultThemes.exists()) return;
+  const defaultThemesData = defaultThemes.data() as ThemesDocumentType;
   getDocs(themes).then(async querySnapshot => {
-    const themes: themeType[] = [];
+    const mappedThemes: string[] = [];
     querySnapshot.forEach(doc => {
-      themes.push(doc.data() as themeType);
+      mappedThemes.push(doc.data()?.name as string);
     });
-    await storeWrite(storeGetDocument('default', 'themes'), { themes: themes.map(theme => theme.name) });
+    await storeWrite(storeGetDocument('default', 'themes'), { themes: mappedThemes, newThemes: [...defaultThemesData?.newThemes].filter(theme => !mappedThemes.includes(theme)) } as ThemesDocumentType);
+    setter({ themes: mappedThemes, newThemes: [...defaultThemesData?.newThemes].filter(theme => !mappedThemes.includes(theme)) } as ThemesDocumentType);
   });
 };

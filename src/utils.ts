@@ -25,8 +25,6 @@ export const getBase64FromUrl = async (url: string): Promise<string> => {
   });
 };
 
-export const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
-
 export const loadingQuotes: string[] = ["Yea I'm loading", 'Loading is fun', "You know that it's loading", "Loading is not a bug, it's a feature", 'James is loading', 'Loading is lie', 'Loading is life', 'Loading is love'];
 
 export const GAMEMODES = [
@@ -44,48 +42,3 @@ export const getGameModeDescription = (currentName: string): string => {
   const gameMode = GAMEMODES.find(gameMode => gameMode.name === currentName);
   return gameMode ? gameMode.description : '';
 };
-export const themes = [
-  'Civilization',
-  'Garden',
-  'Animal',
-  'Vegetable',
-  'Mineral',
-  'Fruit',
-  'Vehicle',
-  'Weapon',
-  'Furniture',
-  'Clothing',
-  'Food',
-  'Dog',
-  'Cat',
-  'House',
-  'Flower',
-  'Tree',
-  'Bird',
-  'Fish',
-  'Buildings',
-  'Sports',
-  'Games',
-  '3D',
-  'Chrismas',
-  'Horror characters',
-  'candy',
-  'electronics',
-  'Easter',
-  'Mushrooms',
-  'Halloween',
-  'toys',
-  'princesses',
-  'shops',
-  'brands',
-  'Jewelry',
-  'Boots',
-  'Bags',
-  'castles',
-  'interior',
-  'Balloons',
-  'hats',
-  'social media',
-  'fast food',
-  'Drinks',
-];

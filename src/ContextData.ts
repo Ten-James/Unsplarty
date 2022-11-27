@@ -33,7 +33,7 @@ export interface DataContextType {
 export const DataContext = createContext<DataContextType>({
   myUuid: '',
   setMyUuid: () => {},
-  me: { name: '', lastOpinion: -1, score: 0, streak: 0, loaded: false, addedScore: 0 },
+  me: undefined,
   userName: '',
   setUserName: () => {},
   playerOrder: [],
