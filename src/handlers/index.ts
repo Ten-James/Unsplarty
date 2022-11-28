@@ -63,7 +63,14 @@ export const onPlayerVote = (uuid: string, player: PlayerType | undefined, vote:
   } else write(`players/${uuid}/streak`, 0);
 };
 
-export const Handler = async (theme: string, players: { [key: string]: PlayerType }, setGameState: (state: string) => void, setImage: (url: string) => void, setFakeImage: (urls: string[]) => void, get4Images: (theme: string) => Promise<string[]>) => {
+export const Handler = async (
+  theme: string,
+  players: { [key: string]: PlayerType },
+  setGameState: (state: string) => void,
+  setImage: (url: string) => void,
+  setFakeImage: (urls: string[]) => void,
+  get4Images: (theme: string) => Promise<string[]>,
+) => {
   Object.keys(players).forEach(uuid => {
     write(`players/${uuid}/lastOpinion`, -1);
     write(`players/${uuid}/addedScore`, 0);

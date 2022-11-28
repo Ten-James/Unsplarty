@@ -12,7 +12,11 @@ const Reveal = () => {
       <Base title="Results">
         <HeaderText text={`It was ${currentTheme}`} />
 
-        <Stack direction="row" alignItems="center" justifyContent="center">
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="center"
+        >
           <img
             src={imageUrls[0]}
             alt="winning image"
@@ -22,23 +26,44 @@ const Reveal = () => {
               display: 'block',
             }}
           />
-          <Stack direction="column" alignItems="center" justifyContent="center">
+          <Stack
+            direction="column"
+            alignItems="center"
+            justifyContent="center"
+          >
             <HeaderText text="The winner is" />
             {Object.entries(players)
               .filter(([uuid, player]) => player.lastOpinion === 0 && uuid !== currentPlayerUUID)
               .map(([uuid, player]) => player)
               .sort((a, b) => b.score - a.score)
               .map(player => (
-                <PlainText key={player.name} text={`${player.name}`} />
+                <PlainText
+                  key={player.name}
+                  text={`${player.name}`}
+                />
               ))}
           </Stack>
         </Stack>
-        <Stack sx={{ mt: '1rem' }} direction="row" alignItems="center" justifyContent="center">
-          <ButtonGroup variant="contained" aria-label="outlined button group">
-            <Button disabled={!amIMaster} onClick={() => setGameState('results')}>
+        <Stack
+          sx={{ mt: '1rem' }}
+          direction="row"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <ButtonGroup
+            variant="contained"
+            aria-label="outlined button group"
+          >
+            <Button
+              disabled={!amIMaster}
+              onClick={() => setGameState('results')}
+            >
               Score
             </Button>
-            <Button disabled={!amIMaster} onClick={() => setGameState('images')}>
+            <Button
+              disabled={!amIMaster}
+              onClick={() => setGameState('images')}
+            >
               Show All Images
             </Button>
           </ButtonGroup>
@@ -52,7 +77,11 @@ const Reveal = () => {
       <HeaderText text={'Noone choose it right.'} />
       <HeaderText text={`It was ${currentTheme}`} />
 
-      <Stack direction="row" alignItems="center" justifyContent="center">
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="center"
+      >
         <img
           src={imageUrls[0]}
           alt="winning image"
@@ -63,12 +92,26 @@ const Reveal = () => {
           }}
         />
       </Stack>
-      <Stack sx={{ mt: '1rem' }} direction="row" alignItems="center" justifyContent="center">
-        <ButtonGroup variant="contained" aria-label="outlined button group">
-          <Button disabled={!amIMaster} onClick={() => setGameState('results')}>
+      <Stack
+        sx={{ mt: '1rem' }}
+        direction="row"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <ButtonGroup
+          variant="contained"
+          aria-label="outlined button group"
+        >
+          <Button
+            disabled={!amIMaster}
+            onClick={() => setGameState('results')}
+          >
             Score
           </Button>
-          <Button disabled={!amIMaster} onClick={() => setGameState('images')}>
+          <Button
+            disabled={!amIMaster}
+            onClick={() => setGameState('images')}
+          >
             Show All Images
           </Button>
         </ButtonGroup>

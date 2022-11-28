@@ -36,16 +36,37 @@ const Result = () => {
           .slice(1)
           .map(player => (
             <React.Fragment key={player.name}>
-              <PlainText sx={{ textAlign: 'left' }} margin="0" text={`${player.name}:  ${Math.floor(player.score)} points. +${Math.floor(player.addedScore)} ${player.score > 950 ? 'So close...' : ''} `} />
-              <LinearProgress variant="determinate" value={Math.min(Math.floor(player.score) / 10, 100)} />
+              <PlainText
+                sx={{ textAlign: 'left' }}
+                margin="0"
+                text={`${player.name}:  ${Math.floor(player.score)} points. +${Math.floor(player.addedScore)} ${player.score > 950 ? 'So close...' : ''} `}
+              />
+              <LinearProgress
+                variant="determinate"
+                value={Math.min(Math.floor(player.score) / 10, 100)}
+              />
             </React.Fragment>
           ))}
-        <Stack sx={{ mt: '1rem' }} direction="row" alignItems="center" justifyContent="center">
-          <ButtonGroup variant="contained" aria-label="outlined button group">
-            <Button disabled={!amIMaster} onClick={() => resetLobby(players, true)}>
+        <Stack
+          sx={{ mt: '1rem' }}
+          direction="row"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <ButtonGroup
+            variant="contained"
+            aria-label="outlined button group"
+          >
+            <Button
+              disabled={!amIMaster}
+              onClick={() => resetLobby(players, true)}
+            >
               To lobby
             </Button>
-            <Button disabled={!amIMaster} onClick={() => setGameState('images')}>
+            <Button
+              disabled={!amIMaster}
+              onClick={() => setGameState('images')}
+            >
               Show All Images
             </Button>
           </ButtonGroup>
@@ -61,19 +82,43 @@ const Result = () => {
         .filter(player => player.name !== undefined)
         .map(player => (
           <React.Fragment key={player.name}>
-            <PlainText sx={{ textAlign: 'left' }} margin="0" text={`${player.name}:  ${Math.floor(player.score)} Points. +${Math.floor(player.addedScore)} `} />
-            <LinearProgress variant="determinate" value={Math.min(Math.floor(player.score) / 10, 100)} />
+            <PlainText
+              sx={{ textAlign: 'left' }}
+              margin="0"
+              text={`${player.name}:  ${Math.floor(player.score)} Points. +${Math.floor(player.addedScore)} `}
+            />
+            <LinearProgress
+              variant="determinate"
+              value={Math.min(Math.floor(player.score) / 10, 100)}
+            />
           </React.Fragment>
         ))}
-      <Stack sx={{ mt: '1rem' }} direction="row" alignItems="center" justifyContent="center">
-        <ButtonGroup variant="contained" aria-label="outlined button group">
-          <Button disabled={!amIMaster} onClick={() => resetLobby(players, true)}>
+      <Stack
+        sx={{ mt: '1rem' }}
+        direction="row"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <ButtonGroup
+          variant="contained"
+          aria-label="outlined button group"
+        >
+          <Button
+            disabled={!amIMaster}
+            onClick={() => resetLobby(players, true)}
+          >
             To lobby
           </Button>
-          <Button disabled={!amIMaster} onClick={() => newRound(players, nextPlayer, setGameState)}>
+          <Button
+            disabled={!amIMaster}
+            onClick={() => newRound(players, nextPlayer, setGameState)}
+          >
             Continue
           </Button>
-          <Button disabled={!amIMaster} onClick={() => setGameState('images')}>
+          <Button
+            disabled={!amIMaster}
+            onClick={() => setGameState('images')}
+          >
             Show All Images
           </Button>
         </ButtonGroup>

@@ -11,12 +11,20 @@ const Base = ({ title, children, noPaper }: BaseProps) => {
   return (
     <>
       <Navigation title={title} />
-      <Grid container spacing={2} justifyContent="center" alignItems="center">
+      <Grid
+        container
+        spacing={2}
+        justifyContent="center"
+        alignItems="center"
+      >
         <Grid item>
           {noPaper ? (
             children
           ) : (
-            <Paper elevation={3} style={{ padding: '2rem' }}>
+            <Paper
+              elevation={3}
+              style={{ padding: '2rem' }}
+            >
               {children}
             </Paper>
           )}

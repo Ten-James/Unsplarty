@@ -20,12 +20,26 @@ export default function ThemeSelect() {
     <Base title="Theme Select">
       {amIChooser ? (
         <>
-          <HeaderText margin="0" text="Select your theme" />
-          <Stack sx={{ mt: '1rem' }} direction="row" alignItems="center" justifyContent="center">
-            <ButtonGroup variant="contained" aria-label="outlined button group">
+          <HeaderText
+            margin="0"
+            text="Select your theme"
+          />
+          <Stack
+            sx={{ mt: '1rem' }}
+            direction="row"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <ButtonGroup
+              variant="contained"
+              aria-label="outlined button group"
+            >
               {themes &&
                 themes.map(theme => (
-                  <Button key={theme} onClick={() => Handler(theme, players, setGameState, setImage, setFakeImage, get4Images)}>
+                  <Button
+                    key={theme}
+                    onClick={() => Handler(theme, players, setGameState, setImage, setFakeImage, get4Images)}
+                  >
                     {theme}
                   </Button>
                 ))}

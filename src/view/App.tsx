@@ -56,7 +56,9 @@ const App = ({ darkTheme, setDarkTheme }: AppProps) => {
   }, [image, fakeImage, requiredImages]);
 
   useEffect(() => {
-    if (amIMaster) if (players !== null && !doesTimerStarted) if (Object.values(players).every(p => p.name !== undefined && p.loaded)) if (whenRoundStart < new Date().getTime()) setWhenRoundStart(new Date().getTime() + 5000);
+    if (amIMaster)
+      if (players !== null && !doesTimerStarted)
+        if (Object.values(players).every(p => p.name !== undefined && p.loaded)) if (whenRoundStart < new Date().getTime()) setWhenRoundStart(new Date().getTime() + 5000);
   }, [players]);
 
   useEffect(() => {

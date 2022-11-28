@@ -11,11 +11,19 @@ const LoginPage = ({ setUser }: LoginPageProps) => {
   return (
     <Base title="login">
       <HeaderText text="Login" />
-      <Button fullWidth variant="contained" onClick={() => signInWithGoogleHandler(setUser)}>
+      <Button
+        fullWidth
+        variant="contained"
+        onClick={() => signInWithGoogleHandler(setUser)}
+      >
         Login with Google
       </Button>
       <PlainText text="You need to have admin rights anyway." />
-      <Button href="\" fullWidth variant="contained">
+      <Button
+        href="\"
+        fullWidth
+        variant="contained"
+      >
         To lobby
       </Button>
     </Base>

@@ -11,18 +11,41 @@ export default function GameSelect() {
   return (
     <Base title="Game Select">
       <HeaderText text={`Current game: ${currentGame}`} />
-      <Grid container justifyContent="center" alignItems="center" sx={{ margin: '2em 0' }}>
+      <Grid
+        container
+        justifyContent="center"
+        alignItems="center"
+        sx={{ margin: '2em 0' }}
+      >
         <ButtonGroup variant="outlined">
           {GAMEMODES.map(game => (
-            <Button key={game.name} disabled={!amIMaster} variant={currentGame === game.name ? 'contained' : 'outlined'} onClick={() => setCurrentGame(game.name)}>
+            <Button
+              key={game.name}
+              disabled={!amIMaster}
+              variant={currentGame === game.name ? 'contained' : 'outlined'}
+              onClick={() => setCurrentGame(game.name)}
+            >
               {game.name}
             </Button>
           ))}
         </ButtonGroup>
       </Grid>
-      <PlainText sx={{ maxWidth: '50vw' }} text={getGameModeDescription(currentGame)} />
-      <Grid container justifyContent="center" alignItems="center" sx={{ padding: '0.3em' }}>
-        <Button fullWidth variant="contained" disabled={!amIMaster} onClick={() => StartGame(players)}>
+      <PlainText
+        sx={{ maxWidth: '50vw' }}
+        text={getGameModeDescription(currentGame)}
+      />
+      <Grid
+        container
+        justifyContent="center"
+        alignItems="center"
+        sx={{ padding: '0.3em' }}
+      >
+        <Button
+          fullWidth
+          variant="contained"
+          disabled={!amIMaster}
+          onClick={() => StartGame(players)}
+        >
           Start
         </Button>
       </Grid>

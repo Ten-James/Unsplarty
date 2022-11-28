@@ -33,18 +33,50 @@ export default function Loading({ reason }: { reason?: string }) {
   return (
     <>
       <Navigation title="Loading" />
-      <Grid container spacing={2} justifyContent="center" alignItems="center">
-        <Grid container item spacing={2} justifyContent="center" alignItems="center" direction="column">
+      <Grid
+        container
+        spacing={2}
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Grid
+          container
+          item
+          spacing={2}
+          justifyContent="center"
+          alignItems="center"
+          direction="column"
+        >
           {/* <CircularProgress /> */}
-          <Box bgcolor={th => th.palette.primary.main} className="load load1"></Box>
-          <Box bgcolor={th => th.palette.primary.main} className="load load2"></Box>
-          <Box bgcolor={th => th.palette.primary.main} className="load load3"></Box>
-          <Box bgcolor={th => th.palette.primary.main} className="load load4"></Box>
-          <Typography variant="h3" color="primary" className="load5">
+          <Box
+            bgcolor={th => th.palette.primary.main}
+            className="load load1"
+          ></Box>
+          <Box
+            bgcolor={th => th.palette.primary.main}
+            className="load load2"
+          ></Box>
+          <Box
+            bgcolor={th => th.palette.primary.main}
+            className="load load3"
+          ></Box>
+          <Box
+            bgcolor={th => th.palette.primary.main}
+            className="load load4"
+          ></Box>
+          <Typography
+            variant="h3"
+            color="primary"
+            className="load5"
+          >
             {me && me.loaded ? 'I am Loaded...' : visibleQuote}
           </Typography>
           {reason && (
-            <Typography variant="h6" color="primary" className="load6">
+            <Typography
+              variant="h6"
+              color="primary"
+              className="load6"
+            >
               {reason}
             </Typography>
           )}

@@ -25,7 +25,16 @@ export const getBase64FromUrl = async (url: string): Promise<string> => {
   });
 };
 
-export const loadingQuotes: string[] = ["Yea I'm loading", 'Loading is fun', "You know that it's loading", "Loading is not a bug, it's a feature", 'James is loading', 'Loading is lie', 'Loading is life', 'Loading is love'];
+export const loadingQuotes: string[] = [
+  "Yea I'm loading",
+  'Loading is fun',
+  "You know that it's loading",
+  "Loading is not a bug, it's a feature",
+  'James is loading',
+  'Loading is lie',
+  'Loading is life',
+  'Loading is love',
+];
 
 export const GAMEMODES = [
   {
@@ -34,7 +43,8 @@ export const GAMEMODES = [
   },
   {
     name: 'talk&guess reverse',
-    description: 'One player is the chooser. The chooser chooses a theme and he has to guess the picture in hurry of time. The others are guessers. The guessers try to describe the picture to the chooser.',
+    description:
+      'One player is the chooser. The chooser chooses a theme and he has to guess the picture in hurry of time. The others are guessers. The guessers try to describe the picture to the chooser.',
   },
 ];
 

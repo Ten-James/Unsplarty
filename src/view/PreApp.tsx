@@ -23,11 +23,28 @@ const PreApp = () => {
   return (
     <ThemeProvider theme={darkTheme ? darkThemeOption : lightThemeOption}>
       <Suspense fallback={<Loading />}>
-        <Box bgcolor={theme => theme.palette.background.default} className="App">
+        <Box
+          bgcolor={theme => theme.palette.background.default}
+          className="App"
+        >
           <Routes>
-            <Route path="/admin" element={user ? <Fetcher user={user} /> : <LoginPage setUser={setUser} />} />
-            <Route path="/" element={<App darkTheme={darkTheme} setDarkTheme={setTheme} />} />
-            <Route path="*" element={<Loading reason="PAGE NOT FOUND" />} />
+            <Route
+              path="/admin"
+              element={user ? <Fetcher user={user} /> : <LoginPage setUser={setUser} />}
+            />
+            <Route
+              path="/"
+              element={
+                <App
+                  darkTheme={darkTheme}
+                  setDarkTheme={setTheme}
+                />
+              }
+            />
+            <Route
+              path="*"
+              element={<Loading reason="PAGE NOT FOUND" />}
+            />
           </Routes>
         </Box>
       </Suspense>

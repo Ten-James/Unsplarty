@@ -10,19 +10,41 @@ const ImagesView = () => {
   return (
     <Base title="Results">
       <HeaderText text={`It was ${currentTheme}`} />
-      <ImageList variant="masonry" cols={window.innerWidth > 1300 ? 4 : 2} gap={1} sx={{ width: '80vw', maxHeight: '80vh' }}>
+      <ImageList
+        variant="masonry"
+        cols={window.innerWidth > 1300 ? 4 : 2}
+        gap={1}
+        sx={{ width: '80vw', maxHeight: '80vh' }}
+      >
         {imageUrls.map(url => (
           <ImageListItem key={url}>
-            <img src={url} alt="" />
+            <img
+              src={url}
+              alt=""
+            />
           </ImageListItem>
         ))}
       </ImageList>
-      <Stack sx={{ mt: '1rem' }} direction="row" alignItems="center" justifyContent="center">
-        <ButtonGroup variant="contained" aria-label="outlined button group">
-          <Button disabled={!amIMaster} onClick={() => setGameState('results')}>
+      <Stack
+        sx={{ mt: '1rem' }}
+        direction="row"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <ButtonGroup
+          variant="contained"
+          aria-label="outlined button group"
+        >
+          <Button
+            disabled={!amIMaster}
+            onClick={() => setGameState('results')}
+          >
             Score
           </Button>
-          <Button disabled={!amIMaster} onClick={() => setGameState('reveal')}>
+          <Button
+            disabled={!amIMaster}
+            onClick={() => setGameState('reveal')}
+          >
             Winning image
           </Button>
         </ButtonGroup>

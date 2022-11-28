@@ -28,7 +28,10 @@ export default function TalkAGuess() {
   if (amIChooser) {
     if (Phase === 0)
       return (
-        <Base title="Game" noPaper>
+        <Base
+          title="Game"
+          noPaper
+        >
           <img
             id="mainPicture"
             src={imageUrls[0]}
@@ -45,7 +48,10 @@ export default function TalkAGuess() {
     return (
       <Base title="Game">
         <HeaderText text="Describe the picture" />
-        <LinearProgress variant="determinate" value={timer} />
+        <LinearProgress
+          variant="determinate"
+          value={timer}
+        />
       </Base>
     );
   }
@@ -59,11 +65,19 @@ export default function TalkAGuess() {
   }
 
   return (
-    <Base title="Game" noPaper={!chosenImage}>
+    <Base
+      title="Game"
+      noPaper={!chosenImage}
+    >
       {chosenImage ? (
         <HeaderText text="You have already chosen." />
       ) : (
-        <ImageList variant="masonry" cols={window.innerWidth > 1300 ? 4 : 2} gap={1} sx={{ width: '80vw' }}>
+        <ImageList
+          variant="masonry"
+          cols={window.innerWidth > 1300 ? 4 : 2}
+          gap={1}
+          sx={{ width: '80vw' }}
+        >
           {images.map(url => (
             <ImageListItem
               key={url}
@@ -72,12 +86,18 @@ export default function TalkAGuess() {
                 onVote(imageUrls.indexOf(url), new Date().getTime());
               }}
             >
-              <img src={url} alt="" />
+              <img
+                src={url}
+                alt=""
+              />
             </ImageListItem>
           ))}
         </ImageList>
       )}
-      <LinearProgress variant="determinate" value={timer} />
+      <LinearProgress
+        variant="determinate"
+        value={timer}
+      />
     </Base>
   );
 }

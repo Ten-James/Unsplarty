@@ -1,7 +1,7 @@
 import { createApi } from 'unsplash-js';
 import { Random } from 'unsplash-js/dist/methods/photos/types';
 import { getDocs } from 'firebase/firestore';
-import { statusType, ThemesDocumentType } from '../view/fetcher';
+import { StatusType, ThemesDocumentType } from '../features/adminPanel';
 import { storeGetCollection, storeGetDocument, storeRead, storeWrite } from '../firebase/firestore';
 
 const unsplash = createApi({
@@ -9,9 +9,17 @@ const unsplash = createApi({
   accessKey: import.meta.env.VITE_UNSPLASH_ACCESS_KEY,
 });
 
-export const howManyICanFetch = (lastTime: string, lastCount: number): number => (new Date(lastTime).getDate() === new Date().getDate() && new Date(lastTime).getHours() === new Date().getHours() ? 50 - lastCount : 50);
+export const howManyICanFetch = (lastTime: string, lastCount: number): number =>
+  new Date(lastTime).getDate() === new Date().getDate() && new Date(lastTime).getHours() === new Date().getHours() ? 50 - lastCount : 50;
 
-export const writeAllTemplatesToFirebase = async (onlyNew: boolean, setStatus: React.Dispatch<React.SetStateAction<statusType>>, lastTime: string, setLastTime: (a: string) => void, lastCount: number, setLastCount: (a: number) => void) => {
+export const writeAllTemplatesToFirebase = async (
+  onlyNew: boolean,
+  setStatus: React.Dispatch<React.SetStateAction<StatusType>>,
+  lastTime: string,
+  setLastTime: (a: string) => void,
+  lastCount: number,
+  setLastCount: (a: number) => void,
+) => {
   const howManyICanFetchNow = howManyICanFetch(lastTime, lastCount);
 
   const data = await storeRead(storeGetDocument('default', 'themes'));
@@ -43,7 +51,9 @@ export const writeAllTemplatesToFirebase = async (onlyNew: boolean, setStatus: R
   });
 
   setLastTime(new Date().toString());
-  setLastCount(lastCount+ templates.length);
+  let newCount = lastCount + templates.length;
+  newCount = newCount > 50 ? 50 : newCount;
+  setLastCount(newCount);
 };
 
 export const writeAllThemesToFirebase = async (setter: React.Dispatch<React.SetStateAction<ThemesDocumentType>>) => {
@@ -56,7 +66,10 @@ export const writeAllThemesToFirebase = async (setter: React.Dispatch<React.SetS
     querySnapshot.forEach(doc => {
       mappedThemes.push(doc.data()?.name as string);
     });
-    await storeWrite(storeGetDocument('default', 'themes'), { themes: mappedThemes, newThemes: [...defaultThemesData?.newThemes].filter(theme => !mappedThemes.includes(theme)) } as ThemesDocumentType);
+    await storeWrite(storeGetDocument('default', 'themes'), {
+      themes: mappedThemes,
+      newThemes: [...defaultThemesData?.newThemes].filter(theme => !mappedThemes.includes(theme)),
+    } as ThemesDocumentType);
     setter({ themes: mappedThemes, newThemes: [...defaultThemesData?.newThemes].filter(theme => !mappedThemes.includes(theme)) } as ThemesDocumentType);
   });
 };

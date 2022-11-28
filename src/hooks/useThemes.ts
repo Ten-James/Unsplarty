@@ -12,7 +12,8 @@ export const useThemes = () => {
 
   const get3Themes = (): string[] => themes.sort(() => Math.random() - 0.5).slice(0, 3);
 
-  const get4Images = async (theme: string): Promise<string[]> => await storeRead(storeGetDocument('themes', theme)).then(data => (data.exists() ? [...(data.data()?.images as string[])].sort(() => Math.random() - 0.5).slice(0, 4) : []));
+  const get4Images = async (theme: string): Promise<string[]> =>
+    await storeRead(storeGetDocument('themes', theme)).then(data => (data.exists() ? [...(data.data()?.images as string[])].sort(() => Math.random() - 0.5).slice(0, 4) : []));
 
   return [get3Themes, get4Images] as const;
 };
