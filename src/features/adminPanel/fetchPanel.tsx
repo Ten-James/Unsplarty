@@ -1,5 +1,5 @@
 import { useContext, useMemo } from 'react';
-import { Button } from '@mui/material';
+import { Button, Tooltip } from '@mui/material';
 import { BasePaper } from '../../components/Paper';
 import { HorizontalStackStrech, VerticalStack } from '../../components/Stacks';
 import { HeaderText } from '../../components/Typography';
@@ -18,34 +18,41 @@ export const FetchPanel = () => {
           sx={{ width: '80%' }}
           spc={2}
         >
-          <Button
-            variant="contained"
-            sx={{ flexGrow: 1 }}
-            disabled={currentFetchAviable === 0}
-            onClick={() => writeAllTemplatesToFirebase(true, setStatus, lastTime, setLastTime, lastCount, setLastCount)}
-          >
-            Fetch new
-          </Button>
-          <Button
-            variant="contained"
-            sx={{ flexGrow: 1 }}
-            disabled={currentFetchAviable === 0}
-            onClick={() => writeAllTemplatesToFirebase(false, setStatus, lastTime, setLastTime, lastCount, setLastCount)}
-          >
-            Fetch
-          </Button>
+          <Tooltip title="Fetch only new themes from unsplash">
+            <Button
+              variant="contained"
+              sx={{ flexGrow: 1 }}
+              disabled={currentFetchAviable === 0}
+              onClick={() => writeAllTemplatesToFirebase(true, setStatus, lastTime, setLastTime, lastCount, setLastCount)}
+            >
+              Fetch new
+            </Button>
+          </Tooltip>
+          <Tooltip title="Fetch all themes from unsplash">
+            <Button
+              variant="contained"
+              sx={{ flexGrow: 1 }}
+              disabled={currentFetchAviable === 0}
+              onClick={() => writeAllTemplatesToFirebase(false, setStatus, lastTime, setLastTime, lastCount, setLastCount)}
+            >
+              Fetch
+            </Button>
+          </Tooltip>
         </HorizontalStackStrech>
         <HeaderText
           sx={{ TextAlign: 'left' }}
           text={`${status.count}/${status.total}: ${status.status}`}
         />
-        <Button
-          variant="contained"
-          fullWidth
-          onClick={() => writeAllThemesToFirebase(setThemes)}
-        >
-          Rewrite Themes
-        </Button>
+
+        <Tooltip title="It just write themes to one file so in game it can be referenced. Force James to do it automaticaly">
+          <Button
+            variant="contained"
+            fullWidth
+            onClick={() => writeAllThemesToFirebase(setThemes)}
+          >
+            Rewrite Themes
+          </Button>
+        </Tooltip>
       </VerticalStack>
     </BasePaper>
   );
