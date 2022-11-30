@@ -1,24 +1,20 @@
 import { useContext } from 'react';
 import { DataContext } from '../../ContextData';
 import { StartGame } from '../../handlers';
-import { Grid, Button, ButtonGroup, Typography } from '@mui/material';
+import { Button, ButtonGroup } from '@mui/material';
 import Base from '../../components/base';
 import { HeaderText, PlainText } from '../../components/Typography';
-import { GAMEMODES, getGameModeDescription } from '../../utils';
+import { GAME_MODES, getGameModeDescription } from '../../utils';
+import { VerticalStack } from '../../components/Stacks';
 
 export default function GameSelect() {
-  const { currentGame, setCurrentGame, amIMaster, players, userName } = useContext(DataContext);
+  const { currentGame, setCurrentGame, amIMaster, players } = useContext(DataContext);
   return (
     <Base title="Game Select">
-      <HeaderText text={`Current game: ${currentGame}`} />
-      <Grid
-        container
-        justifyContent="center"
-        alignItems="center"
-        sx={{ margin: '2em 0' }}
-      >
+      <VerticalStack spc={2}>
+        <HeaderText text={`Current game: ${currentGame}`} />
         <ButtonGroup variant="outlined">
-          {GAMEMODES.map(game => (
+          {GAME_MODES.map(game => (
             <Button
               key={game.name}
               disabled={!amIMaster}
@@ -29,17 +25,10 @@ export default function GameSelect() {
             </Button>
           ))}
         </ButtonGroup>
-      </Grid>
-      <PlainText
-        sx={{ maxWidth: '50vw' }}
-        text={getGameModeDescription(currentGame)}
-      />
-      <Grid
-        container
-        justifyContent="center"
-        alignItems="center"
-        sx={{ padding: '0.3em' }}
-      >
+        <PlainText
+          sx={{ maxWidth: '50vw' }}
+          text={getGameModeDescription(currentGame)}
+        />
         <Button
           fullWidth
           variant="contained"
@@ -48,7 +37,7 @@ export default function GameSelect() {
         >
           Start
         </Button>
-      </Grid>
+      </VerticalStack>
     </Base>
   );
 }

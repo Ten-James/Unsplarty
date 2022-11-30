@@ -66,10 +66,10 @@ const App = ({ darkTheme, setDarkTheme }: AppProps) => {
       if (whenRoundStart > new Date().getTime()) {
         setDoesTimerStarted(true);
         setTimer(Math.floor((whenRoundStart - new Date().getTime()) / 10));
-        const intervar = setInterval(() => {
+        const interval = setInterval(() => {
           setTimer(old => old - 1);
         }, 10);
-        return () => clearInterval(intervar);
+        return () => clearInterval(interval);
       }
     }
   }, [whenRoundStart]);

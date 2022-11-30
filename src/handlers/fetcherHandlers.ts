@@ -3,6 +3,7 @@ import { Random } from 'unsplash-js/dist/methods/photos/types';
 import { getDocs } from 'firebase/firestore';
 import { StatusType, ThemesDocumentType } from '../features/adminPanel';
 import { storeGetCollection, storeGetDocument, storeRead, storeWrite } from '../firebase/firestore';
+import { ThemeDocumentType } from '../features/adminPanel/types';
 
 const unsplash = createApi({
   //@ts-ignore
@@ -43,7 +44,7 @@ export const writeAllTemplatesToFirebase = async (
     const doc = await storeRead(docRef);
     let data = { name: theme, images: images };
     if (doc.exists()) {
-      data = { name: theme, images: [...doc.data()?.images, ...images] };
+      data = { name: theme, images: [...new Set([...doc.data()?.images, ...images])] };
     }
     await storeWrite(docRef, data);
 
@@ -71,5 +72,25 @@ export const writeAllThemesToFirebase = async (setter: React.Dispatch<React.SetS
       newThemes: [...defaultThemesData?.newThemes].filter(theme => !mappedThemes.includes(theme)),
     } as ThemesDocumentType);
     setter({ themes: mappedThemes, newThemes: [...defaultThemesData?.newThemes].filter(theme => !mappedThemes.includes(theme)) } as ThemesDocumentType);
+  });
+};
+
+export const removeDuplicatesInFirebase = async (setStatus: React.Dispatch<React.SetStateAction<StatusType>>) => {
+  const themes = await storeGetCollection('themes');
+  getDocs(themes).then(async querySnapshot => {
+    const mappedThemes: ThemeDocumentType[] = [];
+    querySnapshot.forEach(doc => {
+      mappedThemes.push(doc.data() as ThemeDocumentType);
+    });
+    setStatus({ count: 0, total: mappedThemes.length * 2, status: 'removing duplicates' });
+    await mappedThemes.forEach(async theme => {
+      const images = [...new Set(theme.images)];
+      await storeWrite(storeGetDocument('themes', theme.name), { name: theme.name, images: images });
+      setStatus(old => ({ count: old.count + 1, total: mappedThemes.length * 2, status: `removing duplicates ${theme.name}` }));
+    });
+    mappedThemes.map(async theme => {
+      await storeWrite(storeGetDocument('themes', theme.name), theme);
+      setStatus(old => ({ count: old.count + 1, total: mappedThemes.length * 2, status: `removing duplicates ${theme.name}` }));
+    });
   });
 };

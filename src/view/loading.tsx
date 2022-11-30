@@ -12,16 +12,10 @@ export default function Loading({ reason }: { reason?: string }) {
       const newQuote = loadingQuotes[Math.floor(Math.random() * loadingQuotes.length)];
       const length = visibleQuote.length;
       const length2 = newQuote.length;
-      const interval2 = setInterval(() => {
-        setVisibleQuote(x => x.slice(0, x.length - 1));
-      }, 20);
+      const interval2 = setInterval(() => setVisibleQuote(x => x.slice(0, x.length - 1)), 20);
+      setTimeout(() => clearInterval(interval2), length * 20);
       setTimeout(() => {
-        clearInterval(interval2);
-      }, length * 20);
-      setTimeout(() => {
-        const interval3 = setInterval(() => {
-          setVisibleQuote(x => x + newQuote[x.length]);
-        }, 20);
+        const interval3 = setInterval(() => setVisibleQuote(x => x + newQuote[x.length]), 20);
         setTimeout(() => {
           setVisibleQuote(newQuote);
           clearInterval(interval3);
@@ -33,55 +27,29 @@ export default function Loading({ reason }: { reason?: string }) {
   return (
     <>
       <Navigation title="Loading" />
-      <Grid
-        container
-        spacing={2}
-        justifyContent="center"
-        alignItems="center"
+      {[1, 2, 3, 4].map(x => (
+        <Box
+          key={x}
+          bgcolor={th => th.palette.primary.main}
+          className={`load load${x}`}
+        />
+      ))}
+      <Typography
+        variant="h3"
+        color="primary"
+        className="load5"
       >
-        <Grid
-          container
-          item
-          spacing={2}
-          justifyContent="center"
-          alignItems="center"
-          direction="column"
+        {me && me.loaded ? 'I am Loaded...' : visibleQuote}
+      </Typography>
+      {reason && (
+        <Typography
+          variant="h6"
+          color="primary"
+          className="load6"
         >
-          {/* <CircularProgress /> */}
-          <Box
-            bgcolor={th => th.palette.primary.main}
-            className="load load1"
-          ></Box>
-          <Box
-            bgcolor={th => th.palette.primary.main}
-            className="load load2"
-          ></Box>
-          <Box
-            bgcolor={th => th.palette.primary.main}
-            className="load load3"
-          ></Box>
-          <Box
-            bgcolor={th => th.palette.primary.main}
-            className="load load4"
-          ></Box>
-          <Typography
-            variant="h3"
-            color="primary"
-            className="load5"
-          >
-            {me && me.loaded ? 'I am Loaded...' : visibleQuote}
-          </Typography>
-          {reason && (
-            <Typography
-              variant="h6"
-              color="primary"
-              className="load6"
-            >
-              {reason}
-            </Typography>
-          )}
-        </Grid>
-      </Grid>
+          {reason}
+        </Typography>
+      )}
     </>
   );
 }

@@ -1,4 +1,4 @@
-import { Suspense, useState, lazy } from 'react';
+import { Suspense, useState, lazy, useCallback, useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { ThemeProvider, Box } from '@mui/material';
 import { darkThemeOption, lightThemeOption } from '../theme';
@@ -15,10 +15,17 @@ const PreApp = () => {
   const [darkTheme, setDarkTheme] = useState(getLocalTheme);
   const [user, setUser] = useState<User>();
 
-  const setTheme = (theme: boolean) => {
-    setDarkTheme(theme);
-    setLocalTheme(theme);
-  };
+  const setTheme = useCallback(
+    (theme: boolean) => {
+      setDarkTheme(theme);
+      setLocalTheme(theme);
+    },
+    [setDarkTheme],
+  );
+
+  useEffect(() => {
+    document.body.style.backgroundColor = darkTheme ? '#121212' : '#d5d5d5';
+  }, [darkTheme]);
 
   return (
     <ThemeProvider theme={darkTheme ? darkThemeOption : lightThemeOption}>

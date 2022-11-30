@@ -6,7 +6,7 @@ import { storeGetDocument, storeRead } from '../firebase/firestore';
 import { useDatabase } from '../hooks/useDatabase';
 import { User } from 'firebase/auth';
 import { resetLobby } from '../handlers';
-import { HorizontalStack, HorizontalStackStrech, VerticalStack } from '../components/Stacks';
+import { HorizontalStack, HorizontalStackBreakpoint, VerticalStack } from '../components/Stacks';
 import { BasePaper } from '../components/Paper';
 import { StatusType, ThemesDocumentType, AdminContext, FetchPanel, ThemesPanel } from '../features/adminPanel';
 
@@ -52,11 +52,21 @@ const Fetcher = ({ user }: FetcherProps) => {
         title="Admin Panel"
         noPaper
       >
-        <HorizontalStack spc={4}>
-          <VerticalStack spc={4}>
+        <HorizontalStackBreakpoint
+          ai="stretch"
+          spc={2}
+        >
+          <VerticalStack
+            ai="stretch"
+            jc="center"
+            spc={4}
+          >
             <BasePaper>
               <HeaderText text={`Logged as ${user.email}`} />
-              <HorizontalStackStrech spc={2}>
+              <HorizontalStack
+                jc="stretch"
+                spc={2}
+              >
                 <Button
                   variant="contained"
                   sx={{ flexGrow: 1 }}
@@ -71,12 +81,12 @@ const Fetcher = ({ user }: FetcherProps) => {
                 >
                   To lobby
                 </Button>
-              </HorizontalStackStrech>
+              </HorizontalStack>
             </BasePaper>
             <FetchPanel />
           </VerticalStack>
           <ThemesPanel />
-        </HorizontalStack>
+        </HorizontalStackBreakpoint>
       </Base>
     </AdminContext.Provider>
   );

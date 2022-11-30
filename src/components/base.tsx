@@ -5,20 +5,23 @@ interface BaseProps {
   title: string;
   children: React.ReactNode;
   noPaper?: boolean;
+  stretch?: boolean;
 }
 
-const Base = ({ title, children, noPaper }: BaseProps) => {
+const Base = ({ title, children, ...args }: BaseProps) => {
   return (
     <>
       <Navigation title={title} />
       <Grid
         container
+        marginTop={8}
+        marginBottom={8}
         spacing={2}
-        justifyContent="center"
-        alignItems="center"
+        justifyContent={args.stretch ? 'stretch' : 'center'}
+        alignItems={args.stretch ? 'stretch' : 'center'}
       >
         <Grid item>
-          {noPaper ? (
+          {args.noPaper ? (
             children
           ) : (
             <Paper

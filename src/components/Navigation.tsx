@@ -16,7 +16,7 @@ export default function Navigation({ title }: Props) {
       item
       sx={{ flexGrow: 1 }}
     >
-      <AppBar position="fixed">
+      <AppBar>
         <Toolbar>
           {me ? (
             <>

@@ -79,9 +79,9 @@ export const Handler = async (
   setGameState('playing');
   write('theme', theme);
   const imageUrls = await get4Images(theme);
-  const datas = await Promise.all(imageUrls.map(url => getBase64FromUrl(url)));
-  setImage(datas[0]);
-  setFakeImage([datas[1], datas[2], datas[3]]);
+  const imageData = await Promise.all(imageUrls.map(url => getBase64FromUrl(url)));
+  setImage(imageData[0]);
+  setFakeImage([imageData[1], imageData[2], imageData[3]]);
   write('requiredImages', 4);
 };
 

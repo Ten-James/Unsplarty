@@ -1,99 +1,129 @@
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
 import { DataContext } from '../../ContextData';
 import { formSubmit } from '../../handlers';
-import { Paper, List, ListItem, ListItemText, TextField, Button, FormControlLabel, Stack } from '@mui/material';
+import { TextField, Button, FormControlLabel, Stack, useMediaQuery, useTheme, SxProps, Theme, Box, Switch } from '@mui/material';
 import Base from '../../components/base';
 import { BasePaper } from '../../components/Paper';
 import { MaterialUISwitch } from '../../components/muiSwitch';
 import { HeaderText, PlainText } from '../../components/Typography';
+import { HorizontalStackBreakpoint, VerticalStack } from '../../components/Stacks';
 
 const Lobby = () => {
   const { setGameState, players, userName, setUserName, amIMaster, changeTheme, theme, setMyUuid, me } = useContext(DataContext);
+  const isBigScreen = useMediaQuery(useTheme().breakpoints.up('md'));
+
+  const paperStyle = useMemo<SxProps<Theme>>(
+    () => ({ p: '2rem', display: 'grid', placeItems: 'stretch', width: isBigScreen ? '20vw' : 'unset', height: isBigScreen ? '33vh' : 'unset' }),
+    [isBigScreen],
+  );
 
   return (
     <Base
       noPaper
       title="Lobby"
     >
-      <Paper
-        elevation={3}
-        style={{ padding: '2rem' }}
+      <HorizontalStackBreakpoint
+        ai="stretch"
+        spc={2}
       >
-        {players ? (
-          <>
-            <HeaderText
-              margin="0"
-              text="Players"
-            />
-            {Object.values(players).map(player => (
-              <PlainText
-                margin="0"
-                sx={{ textAlign: 'left' }}
-                key={player.name}
-                text={player.name}
+        <BasePaper sx={paperStyle}>
+          <VerticalStack
+            jc="space-between"
+            ai="center"
+            spc={1}
+          >
+            <HeaderText text="Client Config" />
+            <VerticalStack>
+              <FormControlLabel
+                control={
+                  <MaterialUISwitch
+                    checked={theme}
+                    onChange={e => changeTheme(e.target.checked)}
+                  />
+                }
+                label="Switch Theme"
+                labelPlacement="start"
               />
-            ))}
-          </>
-        ) : null}
-        {!me ? (
-          <form onSubmit={e => formSubmit(e, players, userName, setMyUuid)}>
-            <Stack
-              sx={{ mt: '1rem' }}
-              direction="column"
-              justifyContent="center"
-              alignItems="center"
-              spacing={2}
+              <FormControlLabel
+                control={<Switch />}
+                disabled
+                label="Enable Sounds"
+                labelPlacement="start"
+              />
+            </VerticalStack>
+            <Button
+              fullWidth
+              variant="contained"
+              disabled
             >
-              <TextField
-                id="standard-basic"
-                label="Username"
-                value={userName}
-                onChange={e => setUserName(e.target.value)}
-                // @ts-ignore
-                onSubmit={e => e.form.submit()}
-                variant="outlined"
-              />
+              Log in
+            </Button>
+          </VerticalStack>
+        </BasePaper>
+        <BasePaper sx={paperStyle}>
+          <VerticalStack
+            jc="space-between"
+            spc={1}
+          >
+            <HeaderText text="Unsplarty" />
+            {!me ? (
+              <form onSubmit={e => formSubmit(e, players, userName, setMyUuid)}>
+                <Stack
+                  direction="column"
+                  justifyContent="center"
+                  alignItems="center"
+                  spacing={2}
+                >
+                  <TextField
+                    id="standard-basic"
+                    label="Username"
+                    value={userName}
+                    onChange={e => setUserName(e.target.value)}
+                    // @ts-ignore
+                    onSubmit={e => e.form.submit()}
+                    variant="outlined"
+                  />
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    type="submit"
+                  >
+                    Log in to game
+                  </Button>
+                </Stack>
+              </form>
+            ) : null}
+            {players ? (
               <Button
+                disabled={!amIMaster}
                 fullWidth
                 variant="contained"
-                type="submit"
+                onClick={() => setGameState('gameSelect')}
               >
-                Log in to game
+                Start
               </Button>
-            </Stack>
-          </form>
-        ) : null}
-        {players && me ? (
-          <Button
-            sx={{ mt: '1rem' }}
-            disabled={!amIMaster}
-            fullWidth
-            variant="contained"
-            onClick={() => setGameState('gameSelect')}
-          >
-            Start
-          </Button>
-        ) : null}
-      </Paper>
-      <Stack
-        sx={{ mt: '1rem' }}
-        direction="row"
-        justifyContent="center"
-        alignItems="center"
-        spacing={2}
-      >
-        <BasePaper sx={{ p: '2rem' }}>
-          <FormControlLabel
-            control={
-              <MaterialUISwitch
-                checked={theme}
-                onChange={e => changeTheme(e.target.checked)}
-              />
-            }
-            label="Switch Theme"
-          />
+            ) : (
+              <div />
+            )}
+          </VerticalStack>
         </BasePaper>
-      </Stack>
+        {players ? (
+          <BasePaper sx={paperStyle}>
+            <VerticalStack spc={1}>
+              <HeaderText text="Players" />
+              {Object.values(players).map(player => (
+                <PlainText
+                  margin="0"
+                  key={player.name}
+                  text={player.name}
+                />
+              ))}
+            </VerticalStack>
+          </BasePaper>
+        ) : (
+          <Box sx={paperStyle} />
+        )}
+      </HorizontalStackBreakpoint>
     </Base>
   );
 };

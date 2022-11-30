@@ -36,7 +36,7 @@ export const loadingQuotes: string[] = [
   'Loading is love',
 ];
 
-export const GAMEMODES = [
+export const GAME_MODES = [
   {
     name: 'talk&guess',
     description: 'One player is the chooser, the others are guessers. The chooser chooses a theme and describes it to the guessers. The guessers try to guess the picture in hurry of time.',
@@ -49,6 +49,6 @@ export const GAMEMODES = [
 ];
 
 export const getGameModeDescription = (currentName: string): string => {
-  const gameMode = GAMEMODES.find(gameMode => gameMode.name === currentName);
+  const gameMode = GAME_MODES.find(gameMode => gameMode.name === currentName);
   return gameMode ? gameMode.description : '';
 };
