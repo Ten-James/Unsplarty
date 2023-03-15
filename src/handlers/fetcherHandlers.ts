@@ -33,7 +33,7 @@ export const writeAllTemplatesToFirebase = async (
       .slice(0, howManyICanFetchNow);
   }
   setStatus({ count: 0, total: templates.length, status: 'fetching' });
-  await templates.forEach(async theme => {
+  templates.forEach(async theme => {
     const result = await unsplash.photos.getRandom({ query: theme, count: 30 });
     if (result.errors) {
       console.error(result.errors[0]);
@@ -58,7 +58,7 @@ export const writeAllTemplatesToFirebase = async (
 };
 
 export const writeAllThemesToFirebase = async (setter: React.Dispatch<React.SetStateAction<ThemesDocumentType>>) => {
-  const themes = await storeGetCollection('themes');
+  const themes = storeGetCollection('themes');
   const defaultThemes = await storeRead(storeGetDocument('default', 'themes'));
   if (!defaultThemes.exists()) return;
   const defaultThemesData = defaultThemes.data() as ThemesDocumentType;
@@ -76,14 +76,14 @@ export const writeAllThemesToFirebase = async (setter: React.Dispatch<React.SetS
 };
 
 export const removeDuplicatesInFirebase = async (setStatus: React.Dispatch<React.SetStateAction<StatusType>>) => {
-  const themes = await storeGetCollection('themes');
+  const themes = storeGetCollection('themes');
   getDocs(themes).then(async querySnapshot => {
     const mappedThemes: ThemeDocumentType[] = [];
     querySnapshot.forEach(doc => {
       mappedThemes.push(doc.data() as ThemeDocumentType);
     });
     setStatus({ count: 0, total: mappedThemes.length * 2, status: 'removing duplicates' });
-    await mappedThemes.forEach(async theme => {
+    mappedThemes.forEach(async theme => {
       const images = [...new Set(theme.images)];
       await storeWrite(storeGetDocument('themes', theme.name), { name: theme.name, images: images });
       setStatus(old => ({ count: old.count + 1, total: mappedThemes.length * 2, status: `removing duplicates ${theme.name}` }));
